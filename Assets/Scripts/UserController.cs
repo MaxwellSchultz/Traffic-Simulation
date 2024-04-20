@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
         // Adjust pitch (rotation around local x-axis)
         pitch -= rotationAmountY;
-        pitch = Mathf.Clamp(pitch, -80f, 80f); // Clamp to prevent flipping
+        pitch = Mathf.Clamp(pitch, -80f, 80f);
         transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
     }
 }
