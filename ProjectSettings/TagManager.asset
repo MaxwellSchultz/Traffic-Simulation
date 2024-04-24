@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Source
   - StoppingBox
+  - Car
   layers:
   - Default
   - TransparentFX
