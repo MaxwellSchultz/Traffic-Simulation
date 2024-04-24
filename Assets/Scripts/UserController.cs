@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
     private float pitch = 0f;
+    private bool isRotating = false;
 
     void Update()
     {
@@ -18,20 +19,34 @@ public class PlayerController : MonoBehaviour
         // Move the object
         transform.Translate(movement);
 
-        // Rotation input
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        // Check if the right mouse button is pressed down
+        if (Input.GetMouseButtonDown(1))
+        {
+            isRotating = true;
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            isRotating = false; // Set flag to false when right mouse button is released
+        }
 
-        // Calculate rotation based on mouse movement
-        float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
-        float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
+        // Rotate the camera if the right mouse button is held down
+        if (isRotating)
+        {
+            // Rotation input
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
 
-        // Rotate the object around the Y axis
-        transform.Rotate(Vector3.up, rotationAmountX);
+            // Calculate rotation based on mouse movement
+            float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
+            float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
 
-        // Adjust pitch (rotation around local x-axis)
-        pitch -= rotationAmountY;
-        pitch = Mathf.Clamp(pitch, -80f, 80f);
-        transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
+            // Rotate the object around the Y axis (horizontal rotation)
+            transform.Rotate(Vector3.up, rotationAmountX);
+
+            // Adjust pitch (vertical rotation around local x-axis)
+            pitch -= rotationAmountY;
+            pitch = Mathf.Clamp(pitch, -80f, 80f);
+            transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
+        }
     }
 }
