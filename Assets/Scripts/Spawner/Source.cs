@@ -21,7 +21,7 @@ public class Source : MonoBehaviour, IsHitReaction
     {
         objectRenderer = GetComponent<Renderer>();
         originalMaterial = objectRenderer.material;
-        myCanvas = GameObject.Find("SourceCanvas");
+        myCanvas = GameObject.Find("SceneCanvas");
         spawnCollider = GetComponent<BoxCollider>();
 
         // Show UI
@@ -45,7 +45,16 @@ public class Source : MonoBehaviour, IsHitReaction
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
-                Instantiate(car, spawnCollider.bounds.center, Quaternion.identity);
+                GameObject newObject = Instantiate(car);
+                newObject.transform.position = transform.position;
+                newObject.SetActive(true);
+                CarAI carAI = newObject.GetComponent<CarAI>();
+                if (carAI)
+                {
+                    GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
+                    int rand = Random.Range(0, gameObjects.Length);
+                    carAI.CustomDestination = gameObjects[rand].transform;
+                }
                 timeSinceLastCar = 0;
             }
             yield return null; // Yield to next frame
