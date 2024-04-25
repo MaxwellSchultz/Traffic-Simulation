@@ -19,7 +19,7 @@ public class Sink : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Car"))
         {
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
     }
 }
