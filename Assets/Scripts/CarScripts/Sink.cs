@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sink : MonoBehaviour
@@ -17,9 +18,9 @@ public class Sink : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Car"))
+        if (other.gameObject.transform.parent.CompareTag("Car"))
         {
-            Destroy(other.gameObject);
+            Destroy(other.gameObject.transform.parent);
         }
     }
 }
