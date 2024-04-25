@@ -5,7 +5,7 @@ public class UserInteraction : MonoBehaviour
     private IsHitReaction prevHit;
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // 0 corresponds to the left mouse button
+        if (Input.GetKeyDown(KeyCode.E)) // 0 corresponds to the left mouse button
         {
             if (prevHit != null) {
                prevHit.UnreactToHit();
