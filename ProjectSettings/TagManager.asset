@@ -8,6 +8,7 @@ TagManager:
   - StoppingBox
   - Car
   - Spawner
+  - Sink
   layers:
   - Default
   - TransparentFX
