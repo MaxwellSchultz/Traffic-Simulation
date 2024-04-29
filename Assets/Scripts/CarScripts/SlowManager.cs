@@ -29,7 +29,7 @@ public class SlowManager : MonoBehaviour
     void Start()
     {
         rb = gameObject.transform.parent.GetComponent<Rigidbody>();
-        colliderStartPos = stopBox.transform.position.z; // Where we set it
+        colliderStartPos = stopBox.transform.localPosition.z; // Where we set it
     }
 
     // Update is called once per frame

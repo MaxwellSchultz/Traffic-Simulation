@@ -18,9 +18,11 @@ public class Sink : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.transform.parent.CompareTag("Car"))
-        {
-            Destroy(other.gameObject.transform.parent);
+        if (!other.gameObject.CompareTag("StoppingBox")) {
+            if (other.gameObject.transform.parent.CompareTag("Car"))
+            {
+                Destroy(other.gameObject.transform.parent.gameObject);
+            }
         }
     }
 }

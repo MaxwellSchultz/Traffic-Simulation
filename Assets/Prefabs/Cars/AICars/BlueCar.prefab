@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1376281552938018953}
   m_Layer: 0
   m_Name: StopBox
-  m_TagString: Untagged
+  m_TagString: StoppingBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
