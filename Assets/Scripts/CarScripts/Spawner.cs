@@ -10,6 +10,9 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     private float delay = 5.0f;
     private float timer;
+    [SerializeField]
+    private GameObject[] Cars;
+    int rand;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +27,10 @@ public class Spawner : MonoBehaviour
     
     void FixedUpdate()
     {
+
         if ( timer > delay) {
+            rand = Random.Range(0, Cars.Length);
+            spawnObject = Cars[rand];
             GameObject newObject = Instantiate(spawnObject);
             newObject.transform.position = transform.position;
             newObject.SetActive(true);
@@ -32,7 +38,7 @@ public class Spawner : MonoBehaviour
             if (carAI)
             {
                 GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
-                int rand = Random.Range(0, gameObjects.Length);
+                rand = Random.Range(0, gameObjects.Length);
                 carAI.CustomDestination = gameObjects[rand].transform;
             }
             timer = 0;

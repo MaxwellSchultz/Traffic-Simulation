@@ -9,12 +9,13 @@ public class SensorManager : MonoBehaviour
 
     void Start()
     {
-        carAI = gameObject.GetComponent<CarAI>();
+        carAI = gameObject.transform.parent.GetComponent<CarAI>();
+        //carAI = gameObject.GetComponent<CarAI>();
     }
 
     private void OnTriggerEnter(Collider car)
     {
-        if (car.gameObject.CompareTag(tagName))
+        if (car.gameObject.transform.parent.CompareTag(tagName))
         {
             carAI.move = false;
         }
@@ -22,7 +23,7 @@ public class SensorManager : MonoBehaviour
 
     private void OnTriggerExit(Collider car)
     {
-        if (car.gameObject.CompareTag(tagName))
+        if (car.gameObject.transform.parent.CompareTag(tagName))
         {
             carAI.move = true;
         }
