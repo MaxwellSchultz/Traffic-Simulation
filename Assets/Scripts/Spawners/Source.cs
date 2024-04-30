@@ -47,7 +47,6 @@ public class Source : MonoBehaviour, IsHitReaction
             {
                 GameObject newObject = Instantiate(car);
                 newObject.transform.position = transform.position;
-                newObject.SetActive(true);
                 CarAI carAI = newObject.GetComponent<CarAI>();
                 if (carAI)
                 {
@@ -56,6 +55,7 @@ public class Source : MonoBehaviour, IsHitReaction
                     carAI.CustomDestination = gameObjects[rand].transform;
                 }
                 timeSinceLastCar = 0;
+                newObject.SetActive(true);
             }
             yield return null; // Yield to next frame
         }
