@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1573695334371417280}
   - component: {fileID: 4029870603836676157}
   - component: {fileID: 3067488767328723590}
+  - component: {fileID: -3841083329303224643}
   m_Layer: 6
   m_Name: AdminPlayer
   m_TagString: MainCamera
@@ -199,3 +200,20 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &-3841083329303224643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741993024456711024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 2080299867
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
