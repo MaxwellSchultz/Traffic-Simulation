@@ -7,15 +7,21 @@ public class UserController : NetworkBehaviour
 {
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
-    public Camera playerCamera;
+    private Camera playerCamera;
     private float pitch = 0f;
     private bool isRotating = false;
 
+    void Start(){
+        if (isLocalPlayer)
+        {
+            playerCamera = gameObject.GetComponent<Camera>();
+            playerCamera.enabled = true;
+        }
+    }
     void Update()
     {
         if (isLocalPlayer)
         {
-
             // Movement input
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
