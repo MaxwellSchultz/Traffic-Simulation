@@ -15,7 +15,7 @@ public class SensorManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider car)
     {
-        if (car.gameObject.transform.parent.CompareTag(tagName))
+        if (car.gameObject.transform.parent.CompareTag(tagName) || car.CompareTag("Barrier"))
         {
             carAI.move = false;
         }
