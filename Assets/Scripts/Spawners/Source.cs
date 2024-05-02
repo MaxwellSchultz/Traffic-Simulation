@@ -47,6 +47,7 @@ public class Source : MonoBehaviour, IsHitReaction
             {
                 GameObject newObject = Instantiate(car);
                 newObject.transform.position = transform.position;
+                newObject.transform.rotation = transform.rotation;
                 CarAI carAI = newObject.GetComponent<CarAI>();
                 if (carAI)
                 {

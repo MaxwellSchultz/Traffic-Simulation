@@ -367,4 +367,12 @@ public class CarAI : MonoBehaviour
             Gizmos.DrawRay(carFront.position, rightRayDirection * rayRange);
         }
     }
+
+    public void ReBakePath()
+    {
+        CalculateNavMashLayerBite();
+        currentWayPoint = 0;
+        allowMovement = true;
+        move = true;
+    }
 }
