@@ -53,6 +53,12 @@ public class CarAI : MonoBehaviour
         move = true;
     }
 
+    void Restart()
+    {
+        waypoints.Clear();
+        CalculateNavMashLayerBite();
+    }
+
     void Start()
     {
         GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
@@ -370,7 +376,7 @@ public class CarAI : MonoBehaviour
 
     public void ReBakePath()
     {
-        CalculateNavMashLayerBite();
+        Restart();
         currentWayPoint = 0;
         allowMovement = true;
         move = true;
