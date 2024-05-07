@@ -7,16 +7,17 @@ public class UserController : NetworkBehaviour
 {
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
-    private Camera playerCamera;
+    private Transform playerCamera;
+    public Transform cameraTarget;
     private float pitch = 0f;
     private bool isRotating = false;
 
-    void Start(){
-        if (isLocalPlayer)
-        {
-            playerCamera = gameObject.GetComponent<Camera>();
-            playerCamera.enabled = true;
-        }
+    public override void OnStartLocalPlayer()
+    {
+        playerCamera = Camera.main.transform;
+        playerCamera.position = cameraTarget.transform.position;
+        playerCamera.rotation = cameraTarget.transform.rotation;
+        playerCamera.SetParent(this.transform);
     }
     void Update()
     {
@@ -30,7 +31,7 @@ public class UserController : NetworkBehaviour
             Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * moveSpeed * Time.deltaTime;
 
             // Move the object
-            playerCamera.transform.Translate(movement);
+            this.transform.Translate(movement);
 
             // Check if the right mouse button is pressed down
             if (Input.GetMouseButtonDown(1))
@@ -52,14 +53,15 @@ public class UserController : NetworkBehaviour
                 // Calculate rotation based on mouse movement
                 float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
                 float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
-
+                Debug.Log("Rotationx" + rotationAmountX);
+                Debug.Log("Rotationy" + rotationAmountY);
                 // Rotate the object around the Y axis (horizontal rotation)
-                playerCamera.transform.Rotate(Vector3.up, rotationAmountX);
+                this.transform.Rotate(Vector3.up, rotationAmountX);
 
                 // Adjust pitch (vertical rotation around local x-axis)
                 pitch -= rotationAmountY;
                 pitch = Mathf.Clamp(pitch, -80f, 80f);
-                playerCamera.transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
+                this.transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
             }
         }
     }
