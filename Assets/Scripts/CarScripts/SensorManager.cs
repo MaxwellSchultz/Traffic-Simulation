@@ -15,17 +15,32 @@ public class SensorManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider car)
     {
-        if (car.gameObject.transform.parent.CompareTag(tagName))
+        if (car.CompareTag("Barrier"))
         {
             carAI.move = false;
         }
+        if (car.gameObject.transform.parent != null)
+        {
+            if (car.gameObject.transform.parent.CompareTag(tagName))
+            {
+                carAI.move = false;
+            }
+        }
+
     }
 
     private void OnTriggerExit(Collider car)
     {
-        if (car.gameObject.transform.parent.CompareTag(tagName))
+        if (car.CompareTag("Barrier"))
         {
             carAI.move = true;
+        }
+        if (car.gameObject.transform.parent != null)
+        {
+            if (car.gameObject.transform.parent.CompareTag(tagName))
+            {
+                carAI.move = true;
+            }
         }
     }
 }

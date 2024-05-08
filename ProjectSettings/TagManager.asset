@@ -9,6 +9,8 @@ TagManager:
   - Car
   - Spawner
   - Sink
+  - NavManager
+  - Barrier
   layers:
   - Default
   - TransparentFX
