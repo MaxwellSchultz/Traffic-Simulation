@@ -22,10 +22,6 @@ public class NavManager : MonoBehaviour
     public void UpdateNavMesh()
     {
         navSurface.BuildNavMesh();
-        GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
-        foreach (GameObject car in cars)
-        {
-            car.GetComponent<CarAI>().ReBakePath();
-        }
+
     }
 }

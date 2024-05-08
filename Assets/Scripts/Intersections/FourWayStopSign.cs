@@ -7,20 +7,28 @@ public class FourWayStopSign : MonoBehaviour
     private LinkedList<GameObject> TrackedCars;
     [SerializeField]
     private NavManager NavManager;
-    [SerializeField]
-    private float StopDelay = 500f;
-    private float Timer;
+    //[SerializeField]
+    //private float StopDelay = 100f;
+    //private float Timer;
 
     [SerializeField]
     private GameObject[] IntersectionBlocks;
+    [SerializeField]
+    private GameObject[] Paths;
     private int IntersectionIter;
+    private Queue<int> queue;
+    private int lastOpen;
+
+    private bool isWaiting;
     // Start is called before the first frame update
     void Start()
     {
-        Timer = 0;
+        queue = new Queue<int>();
+        //Timer = 0;
         IntersectionIter = 0;
         TrackedCars = new LinkedList<GameObject>();
- 
+        lastOpen = -1;
+        isWaiting = false;
     }
 
     // Update is called once per frame
@@ -31,14 +39,16 @@ public class FourWayStopSign : MonoBehaviour
 
     void FixedUpdate()
     {
-        Timer++;
-        if (Timer > StopDelay)
+        /*if (queue.Count > 0)
         {
-            print("aaaaaa");
+            Timer++;
+        }*/
+        if (queue.Count>0&&!isWaiting)
+        {
             CycleBlocks();
             Rebake();
             Repath();
-            Timer = 0;
+            //Timer = 0;
         }
     }
 
@@ -46,23 +56,25 @@ public class FourWayStopSign : MonoBehaviour
     {
         if(other.CompareTag("Car"))
         {
-            TrackedCars.AddLast(other.gameObject);
+            TrackedCars.Remove(other.gameObject);
+            CloseLastOpen();
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Car"))
+       /* if (other.CompareTag("Car"))
         {
             GameObject car = other.gameObject;
             TrackedCars.Remove(car);
-        }
+        }*/
     }
 
     private void Repath()
     {
         foreach(GameObject car in TrackedCars)
         {
-            car.GetComponent<CarAI>().ReBakePath();
+            print("REPATH");
+            car.GetComponentInParent<CarAI>().ReBakePath();
         }
     }
     private void Rebake()
@@ -75,16 +87,26 @@ public class FourWayStopSign : MonoBehaviour
 
     private void CycleBlocks()
     {
-        if (IntersectionBlocks.Length > 0)
+        if (queue.TryDequeue(out IntersectionIter))
         {
-            IntersectionBlocks[IntersectionIter].SetActive(true);
-            IntersectionIter++;
-            if (IntersectionIter >= IntersectionBlocks.Length) 
-            { 
-                IntersectionIter = 0; 
-            }
             IntersectionBlocks[IntersectionIter].SetActive(false);
-
+            Paths[IntersectionIter].SetActive(true);
+            lastOpen = IntersectionIter;
         }
+        isWaiting = true;
+        
     }
+    private void CloseLastOpen()
+    {
+
+        IntersectionBlocks[lastOpen].SetActive(true);
+        Paths[lastOpen].SetActive(false);
+        isWaiting = false;
+    }
+    public void Signal(int id, GameObject car)
+    {
+        queue.Enqueue(id);
+        TrackedCars.AddLast(car);
+    }
+    
 }
