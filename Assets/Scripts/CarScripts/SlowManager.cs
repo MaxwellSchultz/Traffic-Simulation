@@ -14,7 +14,7 @@ public class SlowManager : MonoBehaviour
     [SerializeField]
     private float stoppingDist = 5f; // Depends on car (Maybe find a way to get by weight?
     [SerializeField]
-    private float minStopping = 1f; // Change this to lane width
+    private float minStopping = 8f; // Change this to lane width
 
     // Holder Variables
     private Vector3 velocity;

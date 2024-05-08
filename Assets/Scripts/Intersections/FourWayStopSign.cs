@@ -57,7 +57,7 @@ public class FourWayStopSign : MonoBehaviour
         if(other.CompareTag("Car"))
         {
             TrackedCars.Remove(other.gameObject);
-            CloseLastOpen();
+            StopWaiting();
         }
     }
     private void OnTriggerExit(Collider other)
@@ -89,19 +89,25 @@ public class FourWayStopSign : MonoBehaviour
     {
         if (queue.TryDequeue(out IntersectionIter))
         {
+
             IntersectionBlocks[IntersectionIter].SetActive(false);
-            Paths[IntersectionIter].SetActive(true);
+            //Paths[IntersectionIter].SetActive(true);
             lastOpen = IntersectionIter;
         }
         isWaiting = true;
         
     }
-    private void CloseLastOpen()
+    private void StopWaiting()
+    {
+        IntersectionBlocks[lastOpen].SetActive(true);
+        //Paths[lastOpen].SetActive(false);
+        isWaiting = false;
+    }
+    public void CloseLastOpen()
     {
 
         IntersectionBlocks[lastOpen].SetActive(true);
-        Paths[lastOpen].SetActive(false);
-        isWaiting = false;
+        //Paths[lastOpen].SetActive(false);
     }
     public void Signal(int id, GameObject car)
     {
