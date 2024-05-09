@@ -56,6 +56,7 @@ public class FourWayStopSign : MonoBehaviour
     {
         if(other.CompareTag("Car"))
         {
+            other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
             TrackedCars.Remove(other.gameObject);
             StopWaiting();
         }
