@@ -75,7 +75,7 @@ public class Source : NetworkBehaviour, IsHitReaction
         while (true)
         {
             timeSinceLastCar += Time.deltaTime;
-            Debug.Log("Elapsd " + timeSinceLastCar + "     target: " + (60 / rateOfCars));
+            // Debug.Log("Elapsd " + timeSinceLastCar + "     target: " + (60 / rateOfCars));
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
