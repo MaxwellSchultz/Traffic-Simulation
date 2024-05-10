@@ -323,6 +323,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1131809967 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7931650220134603363, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+  m_PrefabInstance: {fileID: 1759474309}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1131809973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131809967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 637377291
+  _assetId: 3149271982
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &1511958789
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,6 +494,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4935383856852691909, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      propertyPath: car
+      value: 
+      objectReference: {fileID: 2787879422291686075, guid: 57e8e86a3a97da04cb48c77c4c427ab0, type: 3}
     - target: {fileID: 7931650220134603363, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
       propertyPath: m_Name
       value: Source
@@ -479,7 +505,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7931650220134603363, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1131809973}
   m_SourcePrefab: {fileID: 100100000, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
 --- !u!1001 &3409004220702438051
 PrefabInstance:
@@ -565,7 +594,7 @@ PrefabInstance:
     - target: {fileID: 3826901509062507363, guid: 8b4fbc792eb46f742b29c6f0a7d7ed1f, type: 3}
       propertyPath: spawnPrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2787879422291686075, guid: 57e8e86a3a97da04cb48c77c4c427ab0, type: 3}
     - target: {fileID: 7884835633428392180, guid: 8b4fbc792eb46f742b29c6f0a7d7ed1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

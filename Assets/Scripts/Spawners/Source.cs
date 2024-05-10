@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class Source : MonoBehaviour, IsHitReaction
+public class Source : NetworkBehaviour, IsHitReaction 
 {
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
-    public GameObject car;
+    public GameObject prefabToSpawn;
     private Material originalMaterial;
     private Renderer objectRenderer;
     private GameObject myUI;
@@ -16,6 +17,39 @@ public class Source : MonoBehaviour, IsHitReaction
     private bool canSpawn = true;
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
     private float timeSinceLastCar = 0;
+
+
+    // Method to spawn the prefab on the server
+    public void SpawnPrefab()
+    {
+        // Check if we are the server
+        if (!isServer)
+        {
+            Debug.LogError("Cannot spawn prefab: Not running as server.");
+            return;
+        }
+
+        // Check if the prefab is registered as spawnable
+        if (!NetworkManager.singleton.spawnPrefabs.Contains(prefabToSpawn))
+        {
+            Debug.LogError("Prefab is not registered as spawnable.");
+            return;
+        }
+
+        // Spawn the prefab on the server
+        GameObject spawnedPrefab = Instantiate(prefabToSpawn, transform.position, transform.rotation);
+        CarAI carAI = spawnedPrefab.GetComponent<CarAI>();
+        if (carAI)
+        {
+            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
+            int rand = Random.Range(0, gameObjects.Length);
+            carAI.CustomDestination = gameObjects[rand].transform;
+        }
+        timeSinceLastCar = 0;
+        spawnedPrefab.SetActive(true);
+        NetworkServer.Spawn(spawnedPrefab);
+    }
+
 
     void Start()
     {
@@ -45,17 +79,7 @@ public class Source : MonoBehaviour, IsHitReaction
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
-                GameObject newObject = Instantiate(car);
-                newObject.transform.position = transform.position;
-                CarAI carAI = newObject.GetComponent<CarAI>();
-                if (carAI)
-                {
-                    GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
-                    int rand = Random.Range(0, gameObjects.Length);
-                    carAI.CustomDestination = gameObjects[rand].transform;
-                }
-                timeSinceLastCar = 0;
-                newObject.SetActive(true);
+                SpawnPrefab();
             }
             yield return null; // Yield to next frame
         }

@@ -53,8 +53,6 @@ public class UserController : NetworkBehaviour
                 // Calculate rotation based on mouse movement
                 float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
                 float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
-                Debug.Log("Rotationx" + rotationAmountX);
-                Debug.Log("Rotationy" + rotationAmountY);
                 // Rotate the object around the Y axis (horizontal rotation)
                 this.transform.Rotate(Vector3.up, rotationAmountX);
 
