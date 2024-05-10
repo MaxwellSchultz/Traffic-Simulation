@@ -36,12 +36,5 @@ public class Sink : MonoBehaviour, IsHitReaction
         myUI.SetActive(false);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Car"))
-        {
-            Destroy(other.gameObject);
-        }
-    }
 
 }
