@@ -7,17 +7,6 @@ public class IntersectionResourceManager : MonoBehaviour
     bool[] Resources = { true, true, true, true };
     bool Available;
     int[] Requested;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public bool RequestTurn(int id, int intent)
     {
