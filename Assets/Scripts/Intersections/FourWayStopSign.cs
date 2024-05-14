@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class FourWayStopSign : MonoBehaviour
     //[SerializeField]
     //private float StopDelay = 100f;
     //private float Timer;
+    [SerializeField]
+    private PathManager PathManager;
 
     [SerializeField]
     private GameObject[] IntersectionBlocks;
@@ -18,6 +21,10 @@ public class FourWayStopSign : MonoBehaviour
     private int IntersectionIter;
     private Queue<int> queue;
     private int lastOpen;
+
+
+    // Track Cars and Intent
+    private Queue<Tuple<GameObject, int, int>> WaitingCars = new Queue<Tuple<GameObject, int, int>>();
 
     private bool isWaiting;
     // Start is called before the first frame update
@@ -114,6 +121,16 @@ public class FourWayStopSign : MonoBehaviour
     {
         queue.Enqueue(id);
         TrackedCars.AddLast(car);
+    }
+
+    public void SignalIntent(int id, int intent, GameObject car) 
+    {
+        WaitingCars.Enqueue(new Tuple<GameObject, int, int>(car, id, intent));
+    }
+
+    private void LockPath(int id)
+    {
+        
     }
     
 }
