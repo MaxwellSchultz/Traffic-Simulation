@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Sink : MonoBehaviour, IsHitReaction
 {   
+    public int numCarsEaten = 0;
+    public float totalCarsLife = 0;
+    public float averageCarLife = 0;
     public GameObject myUIPrefab;
     public Material hitMaterial;
     private Material originalMaterial;
     private GameObject myUI;
     private GameObject myCanvas;
     private Renderer objectRenderer;
+
     
 
     void Start()
@@ -20,8 +24,18 @@ public class Sink : MonoBehaviour, IsHitReaction
         
         // Show UI
         myUI = Instantiate(myUIPrefab);
-        myUI.SetActive(false);
+        //myUI.SetActive(false);
         myUI.transform.SetParent(myCanvas.transform, false);
+        myUI.GetComponent<FollowWorld>().lookAt = GetComponent<Transform>();
+    }
+
+    void FixedUpdate()
+    {
+        if (numCarsEaten != 0)
+            averageCarLife = totalCarsLife / numCarsEaten;
+        
+        myUI.GetComponent<SinkUIText>().sinkText.text = "# Cars Eaten: " + numCarsEaten.ToString() 
+                                                    + "\nAvg Lifespan: " + averageCarLife.ToString("0.00");
     }
 
     public void ReactToHit()
@@ -40,7 +54,10 @@ public class Sink : MonoBehaviour, IsHitReaction
     {
         if (other.gameObject.CompareTag("Car"))
         {
+            totalCarsLife += other.GetComponentInParent<CarAI>().timeElapsed;
+            Destroy(other.GetComponentInParent<CarAI>().carUI);
             Destroy(other.gameObject);
+            numCarsEaten++;
         }
     }
 

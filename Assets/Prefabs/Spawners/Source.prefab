@@ -121,3 +121,4 @@ MonoBehaviour:
   hitMaterial: {fileID: 2100000, guid: 1f6a58a49ace2a047ac9a110713f8d45, type: 2}
   myUIPrefab: {fileID: 2578839818858591915, guid: 5bbd8673e7384a645b0ee38bd020b9bc, type: 3}
   car: {fileID: 5230214343741513612, guid: c6579a7170de4af49a25d8ad20a4e81d, type: 3}
+  carSign: {fileID: 6573638952772500437, guid: 5d3539f837f2c4c609c306440014f941, type: 3}

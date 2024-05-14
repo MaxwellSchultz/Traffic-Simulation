@@ -8,6 +8,7 @@ public class Source : MonoBehaviour, IsHitReaction
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
     public GameObject car;
+    public GameObject carSign;
     private Material originalMaterial;
     private Renderer objectRenderer;
     private GameObject myUI;
@@ -46,6 +47,11 @@ public class Source : MonoBehaviour, IsHitReaction
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
                 GameObject newObject = Instantiate(car);
+                GameObject newSign = Instantiate(carSign); // instantiate car UI
+                newSign.transform.SetParent(myCanvas.transform); // set car UI parent to canvas
+                newSign.GetComponent<FollowWorld>().lookAt = newObject.transform; // set UI follow script target to car transform object
+                newSign.transform.GetChild(0).gameObject.GetComponent<CarUIText>().carScript = newObject.GetComponent<CarAI>(); // give text UI object ref to car script to get elapsed time 
+                newObject.GetComponent<CarAI>().carUI = newSign; // give car reference to UI for deletion at sink
                 newObject.transform.position = transform.position;
                 newObject.transform.rotation = transform.rotation;
                 CarAI carAI = newObject.GetComponent<CarAI>();

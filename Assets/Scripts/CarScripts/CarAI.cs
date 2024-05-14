@@ -27,6 +27,8 @@ public class CarAI : MonoBehaviour
     public int MaxRPM = 150;
 
     [Header("Debug")]
+    public float timeElapsed = 0; // time since spawning
+    public GameObject carUI; // reference to UI object spawned with car by source
     public bool ShowGizmos;
     public bool Debugger;
 
@@ -66,6 +68,7 @@ public class CarAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        timeElapsed += Time.deltaTime;
         UpdateWheels();
         ApplySteering();
         PathProgress();
