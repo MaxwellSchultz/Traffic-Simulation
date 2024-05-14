@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TrafficLightManager : MonoBehaviour
+public class TrafficLightManager : Intersection
 {
     private Queue<GameObject>[] pileup;
     [SerializeField]
@@ -89,5 +89,8 @@ public class TrafficLightManager : MonoBehaviour
     {
         pileup[i].Enqueue(car);
     }
-
+    public override void Go(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

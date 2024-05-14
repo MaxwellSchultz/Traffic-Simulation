@@ -23,7 +23,19 @@ public class TrafficZone : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
-            fws.Signal(id, other.gameObject);
+            int intent;
+            float turn = other.GetComponentInParent<CarAI>().WillTurn();
+            if (turn > 0)
+            {
+                intent = 0;
+            } else if (turn < 0)
+            {
+                intent = 2;
+            } else
+            {
+                intent = 1;
+            }
+            fws.SignalIntent(id, intent, other.transform.parent.gameObject);
         }
     }
 }

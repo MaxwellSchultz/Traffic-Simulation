@@ -3,6 +3,8 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using static Unity.VisualScripting.Member;
+using static UnityEditor.PlayerSettings;
 
 public class CarAI : MonoBehaviour
 {
@@ -45,6 +47,8 @@ public class CarAI : MonoBehaviour
     private float LocalMaxSpeed;
     private int Fails;
     private float MovementTorque = 1;
+
+    private float TurnDistance = 40f;
 
     void Awake()
     {
@@ -379,5 +383,34 @@ public class CarAI : MonoBehaviour
         currentWayPoint = 0;
         allowMovement = true;
         move = true;
+    }
+
+    public void ConformToPath(List<Vector3> path)
+    {
+        currentWayPoint = 0;
+        waypoints = path;
+    }
+    public void Go()
+    {
+        allowMovement = true;
+        move = true;
+    }
+    public void Stop()
+    {
+        allowMovement=false;
+        move = false;
+    }
+
+    public float WillTurn()
+    {
+        Vector3 nextWaypoint = waypoints.ElementAt(currentWayPoint + 1);
+        if (nextWaypoint != null)
+        {
+            Vector3 distance = (nextWaypoint - gameObject.transform.position).normalized;
+            float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
+            float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
+            return Angle;
+        }
+        else return 0;
     }
 }
