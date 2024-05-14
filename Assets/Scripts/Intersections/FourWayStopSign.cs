@@ -53,22 +53,23 @@ public class FourWayStopSign : Intersection
         {
             Timer++;
         }*/
-        if (queue.Count>0&&!isWaiting)
+        /*if (queue.Count>0&&!isWaiting)
         {
             CycleBlocks();
             Rebake();
             Repath();
             //Timer = 0;
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Car"))
         {
-            other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
+            other.GetComponentInParent<CarAI>().ReBakePath();
+            /*other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
             TrackedCars.Remove(other.gameObject);
-            StopWaiting();
+            StopWaiting();*/
         }
     }
     private void OnTriggerExit(Collider other)
