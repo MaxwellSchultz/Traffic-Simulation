@@ -19,6 +19,10 @@ public class PathManager : MonoBehaviour
 
     private List<Vector3>[] StraightPathList = new List<Vector3>[5];
 
+    [SerializeField, Header("UTurns")]
+    private Transform[] UTurnRoots;
+
+    private List<Vector3>[] UTurnPathList = new List<Vector3>[5];
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +53,14 @@ public class PathManager : MonoBehaviour
                 StraightPathList[i].Add(straightPathRoots[i].GetChild(j).position);
             }
         }
+        for (int i = 0;i<UTurnRoots.Length; i++)
+        {
+            UTurnPathList[i] = new List<Vector3>();
+            for(int j = 0; j < UTurnRoots[i].childCount;j++)
+            {
+                UTurnPathList[i].Add(UTurnRoots[i].GetChild(j).position);
+            }
+        }
     }
 
 
@@ -56,6 +68,7 @@ public class PathManager : MonoBehaviour
      * 0 - Right Turn
      * 1 - Straight
      * 2 - Left Turn
+     * 3 - UTurn
      */
     public List<Vector3> GetTurn(int turn, int i)
     {
@@ -67,6 +80,8 @@ public class PathManager : MonoBehaviour
                 return GetStraight(i);
                 case 2:
                 return GetLeft(i);
+                case 3:
+                return GetUTurn(i);
                 default:
                 return null;
         }
@@ -74,6 +89,7 @@ public class PathManager : MonoBehaviour
         List<Vector3> GetRight(int i) { return RightTurnList[i]; }
         List<Vector3> GetLeft(int i) { return LeftTurnList[i]; }
         List<Vector3> GetStraight(int i) { return StraightPathList[i]; }
+        List<Vector3> GetUTurn(int i) { return UTurnPathList[i]; }
     }
 
 

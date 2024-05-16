@@ -90,9 +90,17 @@ public class FourWayStopSign : Intersection
     {
         if (!AllowedCars.Contains(car))
         {
-            car.GetComponent<CarAI>().Stop();
+            bool allowedTurn = IntersectionResourceManager.Request(id, intent);
             WaitingCars[id] = new Tuple<GameObject, int>(car, intent);
-            IntersectionResourceManager.Request(id, intent);
+            if (!allowedTurn)
+            {
+                car.GetComponent<CarAI>().Stop();
+            }
+            else
+            {
+                Go(id);
+            }
+
         }
 
     }

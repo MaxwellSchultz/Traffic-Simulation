@@ -19,7 +19,13 @@ public class TrafficZone : MonoBehaviour
             other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(false);
             if (turn > 0)
             {
-                intent = 0;
+                if (turn == 720)
+                {
+                    intent = 3;
+                }else
+                {
+                    intent = 0;
+                }
             } else if (turn < 0)
             {
                 intent = 2;

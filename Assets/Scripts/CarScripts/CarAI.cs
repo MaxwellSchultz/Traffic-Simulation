@@ -48,8 +48,8 @@ public class CarAI : MonoBehaviour
     private int Fails;
     private float MovementTorque = 1;
 
-    private float TurnDistance = 40f;
-
+    private float TurnDistance = 30f;
+    private float TurnIntentAngle = 4;
     void Awake()
     {
         currentWayPoint = 0;
@@ -403,6 +403,8 @@ public class CarAI : MonoBehaviour
 
     public float WillTurn()
     {
+        // TurnIntent angle > 4
+        // TurnIntent Distance < 30
         print(currentWayPoint + 1);
         Vector3 nextWaypoint;
         if (waypoints.Count <= currentWayPoint + 1)
@@ -414,12 +416,92 @@ public class CarAI : MonoBehaviour
         }
         if (nextWaypoint != null)
         {
+            float ReturnVal;
             Vector3 distance = (nextWaypoint - gameObject.transform.position).normalized;
             float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
             float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
-            print(Angle > 0 ? "Right" : "Left");
-            return Angle;
+            float Magnitude = (nextWaypoint - gameObject.transform.position).magnitude;
+            if (Angle < TurnIntentAngle)
+            {
+                ReturnVal = 0; // Signal Straight
+            } else if (Magnitude > TurnDistance)
+            {
+                ReturnVal = 0;
+            } else // Mag < TurnDistance
+            {
+                ReturnVal = Angle;
+                ReturnVal *= LeftOrRight(distance);
+                if (CheckUTurn())
+                {
+                    ReturnVal = 720;
+                }
+            }
+            return ReturnVal;
         }
         else return 0;
+        int LeftOrRight(Vector3 move)
+        {
+            int Intent;
+            float Left = Vector3.Dot(move, -gameObject.transform.right);
+            float Right = Vector3.Dot(move, gameObject.transform.right);
+            if (Left > Right)
+            {
+                Intent = -1;
+            } else
+            {
+                Intent = 1;
+            }
+
+            return Intent;
+        }
+        bool CheckUTurn()
+        {
+            bool Attempt = false;
+            List<Vector3> nextMoves = SeeFuture(6);
+            Vector3 forward = gameObject.transform.forward;
+            Vector3 back = -forward;
+            Vector3 pos = gameObject.transform.position;
+            Vector3 dist;
+            float smallestCast = float.MaxValue;
+            float currentCast;
+            float backCast;
+            for (int i = 0; i < nextMoves.Count-1;i++)
+            {
+                if ((nextMoves[i] - pos).magnitude > TurnDistance)
+                {
+                    break;
+                }
+                dist = (nextMoves[i] - gameObject.transform.position).normalized;
+                currentCast = Vector3.Dot(dist, forward);
+                if (currentCast > smallestCast)
+                {
+                    break;
+                }
+                smallestCast = currentCast;
+                dist = (nextMoves[i+1] - gameObject.transform.position).normalized;
+                backCast = Vector3.Dot(dist, back);
+                if (backCast > smallestCast)
+                {
+                    Attempt = true;
+                    break;
+                }
+                
+
+            }
+            return Attempt;
+        }
+        List<Vector3> SeeFuture(int i)
+        {
+            List<Vector3> See = new List<Vector3>();
+            int foreSight = i;
+            int current = currentWayPoint;
+            while (current < waypoints.Count)
+            {
+                See.Add(waypoints[current]);
+                current++;
+                foreSight++;
+            }
+            return See;
+        }
     }
 }

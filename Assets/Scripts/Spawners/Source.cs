@@ -15,7 +15,7 @@ public class Source : MonoBehaviour, IsHitReaction
     private Collider spawnCollider;
     private bool canSpawn = true;
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
-    private float timeSinceLastCar = 0;
+    private float timeSinceLastCar = 10;
 
     void Start()
     {
