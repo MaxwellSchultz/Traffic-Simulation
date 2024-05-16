@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 2222660269484183931}
   m_Layer: 0
   m_Name: StraightPaths
-  m_TagString: Untagged
+  m_TagString: StraightPaths
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -673,6 +673,7 @@ GameObject:
   - component: {fileID: 2512823947711209639}
   - component: {fileID: 8210947391342958164}
   - component: {fileID: 2983851607416441277}
+  - component: {fileID: 4476626812108969155}
   m_Layer: 0
   m_Name: IntersectionBuilt
   m_TagString: Untagged
@@ -831,7 +832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NavManager: {fileID: 7741833222535577847}
   PathManager: {fileID: 8110369763455667559}
-  IntersectionResourceManager: {fileID: 0}
+  IntersectionResourceManager: {fileID: 4600999331911585348}
   IntersectionBlocks:
   - {fileID: 3735002500235770590}
   - {fileID: 6522485315314439811}
@@ -926,6 +927,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 8, y: 2, z: 1}
   m_Center: {x: -4, y: 0, z: -12}
+--- !u!114 &4476626812108969155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2148537117870276566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9295577c8a3c684fb1cea4b04bf1700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Intersection: {fileID: 1052511023019156049}
 --- !u!1 &2334299266359357438
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,7 +2157,7 @@ GameObject:
   - component: {fileID: 1213470077229357755}
   m_Layer: 0
   m_Name: RightTurns
-  m_TagString: Untagged
+  m_TagString: RightPaths
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2209,7 +2223,7 @@ GameObject:
   - component: {fileID: 7499397814249956116}
   m_Layer: 0
   m_Name: LeftTurns
-  m_TagString: Untagged
+  m_TagString: LeftPaths
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

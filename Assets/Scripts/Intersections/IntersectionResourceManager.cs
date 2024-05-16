@@ -27,7 +27,7 @@ public class IntersectionResourceManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        
+        RoundRobin();
     }
     bool RequestTurn(int id, int intent)
     {

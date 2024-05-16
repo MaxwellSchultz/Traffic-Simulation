@@ -16,6 +16,7 @@ public class TrafficZone : MonoBehaviour
         {
             int intent;
             float turn = other.GetComponentInParent<CarAI>().WillTurn();
+            other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(false);
             if (turn > 0)
             {
                 intent = 0;

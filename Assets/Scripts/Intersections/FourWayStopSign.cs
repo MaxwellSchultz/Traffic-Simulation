@@ -20,13 +20,11 @@ public class FourWayStopSign : Intersection
     private GameObject[] IntersectionBlocks;
     [SerializeField]
     private GameObject[] Paths;
-    private int IntersectionIter;
     private Queue<int> queue;
-    private int lastOpen;
 
 
     // Track Cars and Intent
-    private Tuple<GameObject,int>[] WaitingCars;
+    private Tuple<GameObject,int>[] WaitingCars = new Tuple<GameObject, int>[10];
     private LinkedList<GameObject> AllowedCars = new LinkedList<GameObject>();
 
     private bool isWaiting;
@@ -35,10 +33,8 @@ public class FourWayStopSign : Intersection
     {
         queue = new Queue<int>();
         //Timer = 0;
-        IntersectionIter = 0;
+
         TrackedCars = new LinkedList<GameObject>();
-        lastOpen = -1;
-        isWaiting = false;
     }
 
     // Update is called once per frame
@@ -67,6 +63,8 @@ public class FourWayStopSign : Intersection
         if(other.CompareTag("Car"))
         {
             other.GetComponentInParent<CarAI>().ReBakePath();
+            other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(true);
+            AllowedCars.Remove(other.gameObject);
             /*other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
             TrackedCars.Remove(other.gameObject);
             StopWaiting();*/
@@ -81,46 +79,7 @@ public class FourWayStopSign : Intersection
         }*/
     }
 
-    private void Repath()
-    {
-        foreach(GameObject car in TrackedCars)
-        {
-            print("REPATH");
-            car.GetComponentInParent<CarAI>().ReBakePath();
-        }
-    }
-    private void Rebake()
-    {
-        if (NavManager != null)
-        {
-            NavManager.UpdateNavMesh();
-        }
-    }
 
-    private void CycleBlocks()
-    {
-        if (queue.TryDequeue(out IntersectionIter))
-        {
-
-            IntersectionBlocks[IntersectionIter].SetActive(false);
-            //Paths[IntersectionIter].SetActive(true);
-            lastOpen = IntersectionIter;
-        }
-        isWaiting = true;
-        
-    }
-    private void StopWaiting()
-    {
-        IntersectionBlocks[lastOpen].SetActive(true);
-        //Paths[lastOpen].SetActive(false);
-        isWaiting = false;
-    }
-    public void CloseLastOpen()
-    {
-
-        IntersectionBlocks[lastOpen].SetActive(true);
-        //Paths[lastOpen].SetActive(false);
-    }
     public void Signal(int id, GameObject car)
     {
         queue.Enqueue(id);
@@ -129,7 +88,7 @@ public class FourWayStopSign : Intersection
 
     public void SignalIntent(int id, int intent, GameObject car) 
     {
-        if (!AllowedCars.Contains(car) && WaitingCars[id]!=null)
+        if (!AllowedCars.Contains(car))
         {
             car.GetComponent<CarAI>().Stop();
             WaitingCars[id] = new Tuple<GameObject, int>(car, intent);
@@ -140,12 +99,8 @@ public class FourWayStopSign : Intersection
 
     private void LockPath(GameObject car,int id,int intent)
     {
-        List<Vector3> path = new List<Vector3>();
-        Transform[] points = PathManager.GetTurn(intent, id);
-        foreach (Transform t in points)
-        {
-            path.Add(t.position);
-        }
+        List<Vector3> path = PathManager.GetTurn(intent, id);
+
         car.GetComponent<CarAI>().ConformToPath(path);
     }
 

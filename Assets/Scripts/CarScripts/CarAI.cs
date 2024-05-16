@@ -403,12 +403,21 @@ public class CarAI : MonoBehaviour
 
     public float WillTurn()
     {
-        Vector3 nextWaypoint = waypoints.ElementAt(currentWayPoint + 1);
+        print(currentWayPoint + 1);
+        Vector3 nextWaypoint;
+        if (waypoints.Count <= currentWayPoint + 1)
+        {
+            nextWaypoint = waypoints.ElementAt(currentWayPoint);
+        } else
+        {
+            nextWaypoint = waypoints.ElementAt(currentWayPoint + 1);
+        }
         if (nextWaypoint != null)
         {
             Vector3 distance = (nextWaypoint - gameObject.transform.position).normalized;
             float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
             float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
+            print(Angle > 0 ? "Right" : "Left");
             return Angle;
         }
         else return 0;
