@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class Source : NetworkBehaviour, IsHitReaction 
+public class Source : NetworkBehaviour, IsHitReaction
 {
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
@@ -15,19 +15,15 @@ public class Source : NetworkBehaviour, IsHitReaction
     private GameObject myCanvas;
     private Collider spawnCollider;
     private bool canSpawn = true;
+    [SyncVar]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
     private float timeSinceLastCar = 0;
 
 
     // Method to spawn the prefab on the server
+    [Server]
     public void SpawnPrefab()
     {
-        // Check if we are the server
-        if (!isServer)
-        {
-            Debug.LogError("Cannot spawn prefab: Not running as server.");
-            return;
-        }
 
         // Check if the prefab is registered as spawnable
         if (!NetworkManager.singleton.spawnPrefabs.Contains(prefabToSpawn))
@@ -49,8 +45,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         spawnedPrefab.SetActive(true);
         NetworkServer.Spawn(spawnedPrefab);
     }
-
-
     void Start()
     {
         objectRenderer = GetComponent<Renderer>();
@@ -64,12 +58,11 @@ public class Source : NetworkBehaviour, IsHitReaction
         myUI.transform.SetParent(myCanvas.transform, false);
 
         // Create listeners
-        myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(OnSliderValueChanged);
+        myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(CmdSliderValueChanged);
         myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(OnToggle);
 
         StartCoroutine(SpawnObjectCoroutine());
     }
-
     IEnumerator SpawnObjectCoroutine()
     {
         while (true)
@@ -84,7 +77,6 @@ public class Source : NetworkBehaviour, IsHitReaction
             yield return null; // Yield to next frame
         }
     }
-
     bool IsColliderOccupied()
     {
         Collider[] colliders = Physics.OverlapBox(spawnCollider.bounds.center, spawnCollider.bounds.extents, spawnCollider.transform.rotation);
@@ -97,24 +89,24 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
         return false;
     }
-
     public void ReactToHit()
     {
         objectRenderer.material = hitMaterial;
         myUI.SetActive(true);
     }
-
     public void UnreactToHit()
     {
         objectRenderer.material = originalMaterial;
         myUI.SetActive(false);
     }
-
-    public void OnSliderValueChanged(float value)
-    {
+    [Command]
+    public void CmdSliderValueChanged(float value){
         rateOfCars = value;
     }
-
+    [ClientRpc]
+    private void RpcSliderValueChanged(float value){
+        myUI.GetComponentInChildren<Slider>().value = value;
+    }
     public void OnToggle(bool state)
     {
         canSpawn = state;
@@ -122,7 +114,7 @@ public class Source : NetworkBehaviour, IsHitReaction
 
     public void OnDestroy()
     {
-        myUI.GetComponentInChildren<Slider>().onValueChanged.RemoveListener(OnSliderValueChanged);
+        myUI.GetComponentInChildren<Slider>().onValueChanged.RemoveListener(CmdSliderValueChanged);
         myUI.GetComponentInChildren<Toggle>().onValueChanged.RemoveListener(OnToggle);
     }
 }

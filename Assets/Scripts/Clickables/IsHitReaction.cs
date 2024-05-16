@@ -4,6 +4,5 @@ using UnityEngine;
 public interface IsHitReaction
 {
     void ReactToHit();
-
     void UnreactToHit();
 }

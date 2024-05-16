@@ -374,6 +374,22 @@ PrefabInstance:
       propertyPath: sceneId
       value: 637377291
       objectReference: {fileID: 0}
+    - target: {fileID: 1743877259287707238, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      propertyPath: serverOnly
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935383856852691909, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      propertyPath: syncMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935383856852691909, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      propertyPath: syncInterval
+      value: 0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935383856852691909, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
+      propertyPath: syncDirection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7931650220134603363, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
       propertyPath: m_Name
       value: Source
