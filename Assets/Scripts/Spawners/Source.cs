@@ -15,7 +15,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     private GameObject myCanvas;
     private Collider spawnCollider;
     private bool canSpawn = true;
-    [SyncVar]
+    [SyncVar(hook = nameof(RpcSliderValueChanged))]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
     private float timeSinceLastCar = 0;
 
@@ -63,12 +63,12 @@ public class Source : NetworkBehaviour, IsHitReaction
 
         StartCoroutine(SpawnObjectCoroutine());
     }
+    [Server]
     IEnumerator SpawnObjectCoroutine()
     {
         while (true)
         {
             timeSinceLastCar += Time.deltaTime;
-            // Debug.Log("Elapsd " + timeSinceLastCar + "     target: " + (60 / rateOfCars));
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
@@ -89,6 +89,7 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
         return false;
     }
+    [Command]
     public void ReactToHit()
     {
         objectRenderer.material = hitMaterial;
@@ -104,8 +105,8 @@ public class Source : NetworkBehaviour, IsHitReaction
         rateOfCars = value;
     }
     [ClientRpc]
-    private void RpcSliderValueChanged(float value){
-        myUI.GetComponentInChildren<Slider>().value = value;
+    private void RpcSliderValueChanged(float oldValue, float newValue){
+        myUI.GetComponentInChildren<Slider>().value = newValue;
     }
     public void OnToggle(bool state)
     {
