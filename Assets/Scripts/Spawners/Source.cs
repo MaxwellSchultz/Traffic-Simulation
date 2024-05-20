@@ -14,6 +14,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     private GameObject myUI;
     private GameObject myCanvas;
     private Collider spawnCollider;
+    [SyncVar(hook = nameof(RpToggleChanged))]
     private bool canSpawn = true;
     [SyncVar(hook = nameof(RpcSliderValueChanged))]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
@@ -59,7 +60,7 @@ public class Source : NetworkBehaviour, IsHitReaction
 
         // Create listeners
         myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(CmdSliderValueChanged);
-        myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(OnToggle);
+        myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(CmdOnToggle);
 
         StartCoroutine(SpawnObjectCoroutine());
     }
@@ -107,14 +108,18 @@ public class Source : NetworkBehaviour, IsHitReaction
     private void RpcSliderValueChanged(float oldValue, float newValue){
         myUI.GetComponentInChildren<Slider>().value = newValue;
     }
-    public void OnToggle(bool state)
+    [Command]
+    public void CmdOnToggle(bool state)
     {
         canSpawn = state;
     }
-
+[ClientRpc]
+    private void RpToggleChanged(bool oldValue, bool newValue){
+        myUI.GetComponentInChildren<Toggle>().isOn = newValue;
+    }
     public void OnDestroy()
     {
         myUI.GetComponentInChildren<Slider>().onValueChanged.RemoveListener(CmdSliderValueChanged);
-        myUI.GetComponentInChildren<Toggle>().onValueChanged.RemoveListener(OnToggle);
+        myUI.GetComponentInChildren<Toggle>().onValueChanged.RemoveListener(CmdOnToggle);
     }
 }
