@@ -89,7 +89,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
         return false;
     }
-    [Command]
     public void ReactToHit()
     {
         objectRenderer.material = hitMaterial;
