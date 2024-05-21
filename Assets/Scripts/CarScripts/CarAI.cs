@@ -49,7 +49,7 @@ public class CarAI : MonoBehaviour
     private float MovementTorque = 1;
 
     private float TurnDistance = 30f;
-    private float TurnIntentAngle = 4;
+    private float TurnIntentAngle = 3;
     void Awake()
     {
         currentWayPoint = 0;
@@ -421,6 +421,7 @@ public class CarAI : MonoBehaviour
             float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
             float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
             float Magnitude = (nextWaypoint - gameObject.transform.position).magnitude;
+
             if (Angle < TurnIntentAngle)
             {
                 ReturnVal = 0; // Signal Straight
@@ -429,12 +430,37 @@ public class CarAI : MonoBehaviour
                 ReturnVal = 0;
             } else // Mag < TurnDistance
             {
+                List<Vector3> nextMoves = SeeFuture(1);
+                bool confirm = true;
                 ReturnVal = Angle;
                 ReturnVal *= LeftOrRight(distance);
-                if (CheckUTurn())
+                if (CheckUTurn()&&ReturnVal<0)
                 {
                     ReturnVal = 720;
                 }
+                if (ReturnVal < 0)
+                { //If left turn
+                    for (int i = 1; i < nextMoves.Count - 1; i++)
+                    {
+                        Vector3 nextDist = (nextMoves[i] - gameObject.transform.position).normalized;
+                        float nextCosAngle = Vector3.Dot(nextDist, gameObject.transform.forward);
+                        float nextAngle = Mathf.Acos(nextCosAngle) * Mathf.Rad2Deg;
+                        float nextMag = (nextMoves[i] - gameObject.transform.position).magnitude;
+                        if (nextMag < (TurnDistance)&&nextAngle>TurnIntentAngle)
+                        {
+                            confirm = true;
+                        }
+                        else
+                        {
+                            confirm = false;
+                        }
+                    }
+                    if (!confirm)
+                    {
+                        ReturnVal = 0;
+                    }
+                }
+
             }
             return ReturnVal;
         }
@@ -495,7 +521,7 @@ public class CarAI : MonoBehaviour
             List<Vector3> See = new List<Vector3>();
             int foreSight = i;
             int current = currentWayPoint;
-            while (current < waypoints.Count)
+            while (current < waypoints.Count && current-currentWayPoint < foreSight)
             {
                 See.Add(waypoints[current]);
                 current++;

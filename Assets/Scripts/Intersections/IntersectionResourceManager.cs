@@ -141,7 +141,7 @@ public class IntersectionResourceManager : MonoBehaviour
                 return Available;
             //UTurn
             case 3:
-                Available = Resources[0] && Resources[Requested[1]] && Resources[Requested[2]] && Resources[Requested[3]];
+                Available = Resources[0] && Resources[1] && Resources[2] && Resources[3];
                 if (Available)
                 {
                     Resources[0] = false;

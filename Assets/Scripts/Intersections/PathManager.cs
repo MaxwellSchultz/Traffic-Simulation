@@ -86,10 +86,10 @@ public class PathManager : MonoBehaviour
                 return null;
         }
 
-        List<Vector3> GetRight(int i) { return RightTurnList[i]; }
-        List<Vector3> GetLeft(int i) { return LeftTurnList[i]; }
-        List<Vector3> GetStraight(int i) { return StraightPathList[i]; }
-        List<Vector3> GetUTurn(int i) { return UTurnPathList[i]; }
+        List<Vector3> GetRight(int i) { return new List<Vector3>(RightTurnList[i]); }
+        List<Vector3> GetLeft(int i) { return new List<Vector3>(LeftTurnList[i]); }
+        List<Vector3> GetStraight(int i) { return new List<Vector3>(StraightPathList[i]); }
+        List<Vector3> GetUTurn(int i) { return new List<Vector3>(UTurnPathList[i]); }
     }
 
 
