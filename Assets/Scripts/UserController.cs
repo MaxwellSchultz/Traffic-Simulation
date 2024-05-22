@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 
@@ -7,8 +8,14 @@ public class UserController : NetworkBehaviour
 {
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
+    private float sensitivityMultiplier = 1;
+    [SyncVar(hook = nameof(RpcChangeSimSpeed))]
+    private float timeScale = 1;
     private Transform playerCamera;
     public Transform cameraTarget;
+    public GameObject myUIPrefab;
+    private GameObject myUI;
+    private GameObject myCanvas;
     private float pitch = 0f;
     private bool isRotating = false;
 
@@ -18,6 +25,19 @@ public class UserController : NetworkBehaviour
         playerCamera.position = cameraTarget.transform.position;
         playerCamera.rotation = cameraTarget.transform.rotation;
         playerCamera.SetParent(this.transform);
+
+        myCanvas = GameObject.Find("SceneCanvas");
+        myUI = Instantiate(myUIPrefab);
+        myUI.SetActive(true);
+        myUI.transform.SetParent(myCanvas.transform, false);
+
+        Transform sensSliderTransform = myUI.transform.Find("Sensitivity");
+        Transform speedSliderTransform = myUI.transform.Find("Speed");
+        Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
+        Slider sensSlider = sensSliderTransform.GetComponent<Slider>();
+        Debug.Log(sensSlider);
+        speedSlider.onValueChanged.AddListener(CmdChangeSimSpeed);
+        sensSlider.onValueChanged.AddListener(ChangeSensitivity);
     }
     void Update()
     {
@@ -51,10 +71,8 @@ public class UserController : NetworkBehaviour
                 float mouseY = Input.GetAxis("Mouse Y");
 
                 // Calculate rotation based on mouse movement
-                float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
-                float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
-                Debug.Log("Rotationx" + rotationAmountX);
-                Debug.Log("Rotationy" + rotationAmountY);
+                float rotationAmountX = mouseX * sensitivityMultiplier * rotationSpeed * Time.deltaTime;
+                float rotationAmountY = mouseY * sensitivityMultiplier * rotationSpeed * Time.deltaTime;
                 // Rotate the object around the Y axis (horizontal rotation)
                 this.transform.Rotate(Vector3.up, rotationAmountX);
 
@@ -64,5 +82,42 @@ public class UserController : NetworkBehaviour
                 this.transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
             }
         }
+    }
+
+    private void ChangeSensitivity(float sentMult)
+    {
+        sensitivityMultiplier = sentMult;
+        Debug.Log(sentMult);
+    }
+    [Command]
+    public void CmdChangeSimSpeed(float newSpeed)
+    {
+        Time.timeScale = newSpeed;
+        timeScale = newSpeed;
+    }
+    public void RpcChangeSimSpeed(float oldSpeed, float newSpeed)
+    {
+        Time.timeScale = newSpeed;
+        if (this.myUI == null)
+        {
+            Debug.LogError("myUI is null in RpcChangeSimSpeed!");
+            return;
+        }
+
+        Transform speedSliderTransform = this.myUI.transform.Find("Speed");
+        if (speedSliderTransform == null)
+        {
+            Debug.LogError("Speed slider not found!");
+            return;
+        }
+
+        Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
+        if (speedSlider == null)
+        {
+            Debug.LogError("Slider component not found!");
+            return;
+        }
+
+        speedSlider.value = newSpeed;
     }
 }

@@ -38,10 +38,30 @@ public class Sink : MonoBehaviour, IsHitReaction
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger enter car " + other.gameObject.tag);
         if (other.gameObject.CompareTag("Car"))
         {
-            Destroy(other.gameObject);
+            DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
         }
+    }
+
+     void DestroyParentAndChildrenRecursive(GameObject parent)
+    {
+        // Iterate through all child objects of the parent
+        for (int i = parent.transform.childCount - 1; i >= 0; i--)
+        {
+            // Get the child transform
+            Transform child = parent.transform.GetChild(i);
+
+            // Recursively destroy all children of the child
+            DestroyParentAndChildrenRecursive(child.gameObject);
+
+            // Destroy the child GameObject
+            Destroy(child.gameObject);
+        }
+
+        // Destroy the parent GameObject
+        Destroy(parent);
     }
 
 }

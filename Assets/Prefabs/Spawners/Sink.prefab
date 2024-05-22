@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3419927321205148280}
   - component: {fileID: 5185301987355279912}
   - component: {fileID: 6824976520154495896}
+  - component: {fileID: 5641058149589122013}
   m_Layer: 0
   m_Name: Sink
   m_TagString: Sink
@@ -120,3 +121,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myUIPrefab: {fileID: 5766164709756638627, guid: bac582ff0f552ac4b8b13795b3c4d8fa, type: 3}
   hitMaterial: {fileID: 2100000, guid: 1f6a58a49ace2a047ac9a110713f8d45, type: 2}
+--- !u!114 &5641058149589122013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5666065604666966761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1828598826
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0

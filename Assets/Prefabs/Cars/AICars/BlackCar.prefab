@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4555454425130370762}
   m_Layer: 0
   m_Name: Front_Right_Wheel
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 4430408740437478448}
   - component: {fileID: 1090701752600120145}
   - component: {fileID: 6748105723710876931}
+  - component: {fileID: -8704051045812064074}
   m_Layer: 0
   m_Name: BlackCar
   m_TagString: Car
@@ -265,6 +266,23 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &-8704051045812064074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787879422291686075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1095882874
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &3028512850519202851
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +295,7 @@ GameObject:
   - component: {fileID: 6294866640562144023}
   m_Layer: 0
   m_Name: Front_Left_Wheel
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -469,7 +487,7 @@ GameObject:
   - component: {fileID: 6060933049613635038}
   m_Layer: 0
   m_Name: body
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -759,7 +777,7 @@ GameObject:
   - component: {fileID: 1326629153105110747}
   m_Layer: 0
   m_Name: Rear_Right_Wheel
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -913,7 +931,7 @@ GameObject:
   - component: {fileID: 5675274260569385282}
   m_Layer: 0
   m_Name: Rear_Left_Wheel
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

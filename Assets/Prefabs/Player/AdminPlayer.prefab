@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487fa9404330853418991ec5ac3f8315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!114 &9211877674945875288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +120,7 @@ MonoBehaviour:
   moveSpeed: 15
   rotationSpeed: 500
   cameraTarget: {fileID: 2211400833301041664}
+  myUIPrefab: {fileID: 6221836388832857389, guid: a6ec373edb8de2d4c9db49cd985005cc, type: 3}
 --- !u!1 &8875621223594848531
 GameObject:
   m_ObjectHideFlags: 0
