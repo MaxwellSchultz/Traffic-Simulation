@@ -101,11 +101,13 @@ public class Source : NetworkBehaviour, IsHitReaction
         myUI.SetActive(false);
     }
     [Command]
-    public void CmdSliderValueChanged(float value){
+    public void CmdSliderValueChanged(float value)
+    {
         rateOfCars = value;
     }
     [ClientRpc]
-    private void RpcSliderValueChanged(float oldValue, float newValue){
+    private void RpcSliderValueChanged(float oldValue, float newValue)
+    {
         myUI.GetComponentInChildren<Slider>().value = newValue;
     }
     [Command]
@@ -113,8 +115,9 @@ public class Source : NetworkBehaviour, IsHitReaction
     {
         canSpawn = state;
     }
-[ClientRpc]
-    private void RpToggleChanged(bool oldValue, bool newValue){
+    [ClientRpc]
+    private void RpToggleChanged(bool oldValue, bool newValue)
+    {
         myUI.GetComponentInChildren<Toggle>().isOn = newValue;
     }
     public void OnDestroy()

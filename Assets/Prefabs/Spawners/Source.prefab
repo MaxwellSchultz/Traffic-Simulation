@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.11
   hitMaterial: {fileID: 2100000, guid: 1f6a58a49ace2a047ac9a110713f8d45, type: 2}
   myUIPrefab: {fileID: 2578839818858591915, guid: 5bbd8673e7384a645b0ee38bd020b9bc, type: 3}
   prefabToSpawn: {fileID: 2787879422291686075, guid: 57e8e86a3a97da04cb48c77c4c427ab0, type: 3}

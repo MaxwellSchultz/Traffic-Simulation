@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 
@@ -9,6 +10,9 @@ public class UserController : NetworkBehaviour
     public float rotationSpeed = 100f; // Speed of rotation
     private Transform playerCamera;
     public Transform cameraTarget;
+    public GameObject myUIPrefab;
+    private GameObject myUI;
+    private GameObject myCanvas;
     private float pitch = 0f;
     private bool isRotating = false;
 
@@ -18,6 +22,18 @@ public class UserController : NetworkBehaviour
         playerCamera.position = cameraTarget.transform.position;
         playerCamera.rotation = cameraTarget.transform.rotation;
         playerCamera.SetParent(this.transform);
+
+        myCanvas = GameObject.Find("SceneCanvas");
+        myUI = Instantiate(myUIPrefab);
+        myUI.transform.SetParent(myCanvas.transform, false);
+
+        Transform speedSliderTransform = myUI.transform.Find("SimSpeedSlider");
+        Transform sensSliderTransform = myUI.transform.Find("SensitivitySlider");
+        Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
+        Slider sensSlider = sensSliderTransform.GetComponent<Slider>();
+
+        // speedSlider.onValueChanged.AddListener(CmdSliderValueChanged);
+        // sensSlider.onValueChanged.AddListener(CmdOnToggle);
     }
     void Update()
     {
