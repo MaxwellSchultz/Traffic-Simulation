@@ -6,26 +6,32 @@ public class SensorManager : MonoBehaviour
 {
     private CarAI carAI;
     public string tagName;
+    private bool active;
 
     void Start()
     {
         carAI = gameObject.transform.parent.GetComponent<CarAI>();
         //carAI = gameObject.GetComponent<CarAI>();
+        active = true;
     }
 
-    private void OnTriggerEnter(Collider car)
+    private void OnTriggerStay(Collider car)
     {
-        if (car.CompareTag("Barrier"))
+        if (active)
         {
-            carAI.move = false;
-        }
-        if (car.gameObject.transform.parent != null)
-        {
-            if (car.gameObject.transform.parent.CompareTag(tagName))
+            if (car.CompareTag("Barrier"))
             {
                 carAI.move = false;
             }
+            if (car.gameObject.transform.parent != null)
+            {
+                if (car.gameObject.transform.parent.CompareTag(tagName))
+                {
+                    carAI.move = false;
+                }
+            }
         }
+
 
     }
 
@@ -42,5 +48,10 @@ public class SensorManager : MonoBehaviour
                 carAI.move = true;
             }
         }
+    }
+
+    public void Active(bool set)
+    {
+        active = set;
     }
 }

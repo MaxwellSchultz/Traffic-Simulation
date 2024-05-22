@@ -5,25 +5,36 @@ using UnityEngine;
 public class TrafficZone : MonoBehaviour
 {
     [SerializeField]
-    private FourWayStopSign fws;
+    private Intersection fws;
     [SerializeField]
     private int id;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Start is called before the first frame update
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Car"))
         {
-            fws.Signal(id, other.gameObject);
+            int intent;
+            float turn = other.GetComponentInParent<CarAI>().WillTurn();
+            other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(false);
+            if (turn > 0)
+            {
+                if (turn == 720)
+                {
+                    intent = 3;
+                }else
+                {
+                    intent = 0;
+                }
+            } else if (turn < 0)
+            {
+                intent = 2;
+            } else
+            {
+                intent = 1;
+            }
+            fws.SignalIntent(id, intent, other.transform.parent.gameObject);
         }
     }
 }

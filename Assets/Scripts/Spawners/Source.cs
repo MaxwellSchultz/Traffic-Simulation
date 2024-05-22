@@ -18,7 +18,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     private bool canSpawn = true;
     [SyncVar(hook = nameof(SliderValueChanged))]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
-    private float timeSinceLastCar = 0;
+    private float timeSinceLastCar = 10;
 
 
     // Method to spawn the prefab on the server
@@ -70,6 +70,7 @@ public class Source : NetworkBehaviour, IsHitReaction
         while (true)
         {
             timeSinceLastCar += Time.deltaTime;
+
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
