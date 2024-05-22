@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class FourWayStopSign : Intersection
+public class StopLight : Intersection
 {
     private LinkedList<GameObject> TrackedCars;
     [SerializeField]
@@ -15,7 +14,7 @@ public class FourWayStopSign : Intersection
     [SerializeField]
     private PathManager PathManager;
     [SerializeField]
-    IntersectionResourceManager IntersectionResourceManager;
+    StopLightManager StopLightManager;
     [SerializeField]
     private GameObject[] IntersectionBlocks;
     [SerializeField]
@@ -24,7 +23,7 @@ public class FourWayStopSign : Intersection
 
 
     // Track Cars and Intent
-    private Tuple<GameObject,int>[] WaitingCars = new Tuple<GameObject, int>[10];
+    private Tuple<GameObject, int>[] WaitingCars = new Tuple<GameObject, int>[10];
     private LinkedList<GameObject> AllowedCars = new LinkedList<GameObject>();
 
     private bool isWaiting;
@@ -37,30 +36,20 @@ public class FourWayStopSign : Intersection
         TrackedCars = new LinkedList<GameObject>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-        /*if (queue.Count > 0)
-        {
-            Timer++;
-        }*/
-        /*if (queue.Count>0&&!isWaiting)
-        {
-            CycleBlocks();
-            Rebake();
-            Repath();
-            //Timer = 0;
-        }*/
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Car"))
+        if (other.CompareTag("Car"))
+        {
+            other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(false);
+            AllowedCars.AddFirst(other.gameObject);
+            /*other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
+            TrackedCars.Remove(other.gameObject);
+            StopWaiting();*/
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Car"))
         {
             other.GetComponentInParent<CarAI>().ReBakePath();
             other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(true);
@@ -70,55 +59,38 @@ public class FourWayStopSign : Intersection
             StopWaiting();*/
         }
     }
-    private void OnTriggerExit(Collider other)
+    public override void SignalIntent(int id, int intent, GameObject car)
     {
-       /* if (other.CompareTag("Car"))
-        {
-            GameObject car = other.gameObject;
-            TrackedCars.Remove(car);
-        }*/
-    }
 
-
-    public void Signal(int id, GameObject car)
-    {
-        queue.Enqueue(id);
-        TrackedCars.AddLast(car);
-    }
-
-    public void SignalIntent(int id, int intent, GameObject car) 
-    {
+        StopLightManager.AllowLeft((id>=2?id-2:id+2), false);
         if (!AllowedCars.Contains(car))
         {
-            bool allowedTurn = IntersectionResourceManager.Request(id, intent);
-            WaitingCars[id] = new Tuple<GameObject, int>(car, intent);
+            bool allowedTurn = StopLightManager.Request(id, intent);
             if (!allowedTurn)
             {
                 car.GetComponent<CarAI>().Stop();
-            }
-            else
+            } else
             {
                 Go(id);
             }
-
         }
 
     }
 
-    private void LockPath(GameObject car,int id,int intent)
+    private void LockPath(GameObject car, int id, int intent)
     {
         List<Vector3> path = PathManager.GetTurn(intent, id);
 
         car.GetComponent<CarAI>().ConformToPath(path);
     }
-
     public override void Go(int id)
     {
         Tuple<GameObject, int> car = WaitingCars[id];
-        LockPath(car.Item1,id,car.Item2);
+        LockPath(car.Item1, id, car.Item2);
         WaitingCars[id] = null;
         AllowedCars.AddFirst(car.Item1);
         car.Item1.GetComponent<CarAI>().Go();
     }
-    
+
+
 }

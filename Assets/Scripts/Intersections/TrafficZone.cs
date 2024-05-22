@@ -5,9 +5,10 @@ using UnityEngine;
 public class TrafficZone : MonoBehaviour
 {
     [SerializeField]
-    private FourWayStopSign fws;
+    private Intersection fws;
     [SerializeField]
     private int id;
+
     // Start is called before the first frame update
 
     void OnTriggerEnter(Collider other)
