@@ -34,8 +34,8 @@ public class UserController : NetworkBehaviour
         Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
         Slider sensSlider = sensSliderTransform.GetComponent<Slider>();
         Debug.Log(sensSlider);
-        // speedSlider.onValueChanged.AddListener(CmdSliderValueChanged);
-        sensSlider.onValueChanged.AddListener(changeSensitivity);
+        speedSlider.onValueChanged.AddListener(CmdChangeSimSpeed);
+        sensSlider.onValueChanged.AddListener(ChangeSensitivity);
     }
     void Update()
     {
@@ -82,8 +82,41 @@ public class UserController : NetworkBehaviour
         }
     }
 
-    private void changeSensitivity(float sentMult) {
+    private void ChangeSensitivity(float sentMult)
+    {
         sensitivityMultiplier = sentMult;
         Debug.Log(sentMult);
+    }
+    [Command]
+    public void CmdChangeSimSpeed(float newSpeed)
+    {
+        Time.timeScale = newSpeed;
+        RpcChangeSimSpeed(newSpeed);
+    }
+    [ClientRpc]
+    public void RpcChangeSimSpeed(float newSpeed)
+    {
+        Time.timeScale = newSpeed;
+        if (myUI == null)
+        {
+            Debug.LogError("myUI is null in RpcChangeSimSpeed!");
+            return;
+        }
+
+        Transform speedSliderTransform = myUI.transform.Find("Speed");
+        if (speedSliderTransform == null)
+        {
+            Debug.LogError("Speed slider not found!");
+            return;
+        }
+
+        Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
+        if (speedSlider == null)
+        {
+            Debug.LogError("Slider component not found!");
+            return;
+        }
+
+        speedSlider.value = newSpeed;
     }
 }
