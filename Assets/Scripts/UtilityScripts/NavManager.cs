@@ -16,6 +16,12 @@ public class NavManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+           
+    }
+
+    public void UpdateNavMesh()
+    {
+        navSurface.BuildNavMesh();
 
     }
 }

@@ -38,7 +38,7 @@ public class CarAI : MonoBehaviour
 
     private Vector3 PostionToFollow = Vector3.zero;
     private int currentWayPoint;
-    private float AIFOV = 60;
+    private float AIFOV = 50;
     private bool allowMovement;
     private int NavMeshLayerBite;
     private List<Vector3> waypoints = new List<Vector3>();
@@ -51,6 +51,11 @@ public class CarAI : MonoBehaviour
         currentWayPoint = 0;
         allowMovement = true;
         move = true;
+    }
+
+    void Restart()
+    {
+        waypoints.Clear();
     }
 
     void Start()
@@ -366,5 +371,13 @@ public class CarAI : MonoBehaviour
             Gizmos.DrawRay(carFront.position, leftRayDirection * rayRange);
             Gizmos.DrawRay(carFront.position, rightRayDirection * rayRange);
         }
+    }
+
+    public void ReBakePath()
+    {
+        Restart();
+        currentWayPoint = 0;
+        allowMovement = true;
+        move = true;
     }
 }
