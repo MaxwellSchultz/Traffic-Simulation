@@ -8,6 +8,7 @@ public class UserController : NetworkBehaviour
 {
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
+    private float sensitivityMultiplier = 1;
     private Transform playerCamera;
     public Transform cameraTarget;
     public GameObject myUIPrefab;
@@ -25,15 +26,16 @@ public class UserController : NetworkBehaviour
 
         myCanvas = GameObject.Find("SceneCanvas");
         myUI = Instantiate(myUIPrefab);
+        myUI.SetActive(true);
         myUI.transform.SetParent(myCanvas.transform, false);
 
-        Transform speedSliderTransform = myUI.transform.Find("SimSpeedSlider");
-        Transform sensSliderTransform = myUI.transform.Find("SensitivitySlider");
+        Transform sensSliderTransform = myUI.transform.Find("Sensitivity");
+        Transform speedSliderTransform = myUI.transform.Find("Speed");
         Slider speedSlider = speedSliderTransform.GetComponent<Slider>();
         Slider sensSlider = sensSliderTransform.GetComponent<Slider>();
-
+        Debug.Log(sensSlider);
         // speedSlider.onValueChanged.AddListener(CmdSliderValueChanged);
-        // sensSlider.onValueChanged.AddListener(CmdOnToggle);
+        sensSlider.onValueChanged.AddListener(changeSensitivity);
     }
     void Update()
     {
@@ -67,8 +69,8 @@ public class UserController : NetworkBehaviour
                 float mouseY = Input.GetAxis("Mouse Y");
 
                 // Calculate rotation based on mouse movement
-                float rotationAmountX = mouseX * rotationSpeed * Time.deltaTime;
-                float rotationAmountY = mouseY * rotationSpeed * Time.deltaTime;
+                float rotationAmountX = mouseX * sensitivityMultiplier * rotationSpeed * Time.deltaTime;
+                float rotationAmountY = mouseY * sensitivityMultiplier * rotationSpeed * Time.deltaTime;
                 // Rotate the object around the Y axis (horizontal rotation)
                 this.transform.Rotate(Vector3.up, rotationAmountX);
 
@@ -78,5 +80,10 @@ public class UserController : NetworkBehaviour
                 this.transform.localRotation = Quaternion.Euler(pitch, transform.localRotation.eulerAngles.y, 0f);
             }
         }
+    }
+
+    private void changeSensitivity(float sentMult) {
+        sensitivityMultiplier = sentMult;
+        Debug.Log(sentMult);
     }
 }

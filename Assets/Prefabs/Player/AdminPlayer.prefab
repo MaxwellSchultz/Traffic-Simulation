@@ -120,7 +120,7 @@ MonoBehaviour:
   moveSpeed: 15
   rotationSpeed: 500
   cameraTarget: {fileID: 2211400833301041664}
-  myUIPrefab: {fileID: 3205812382238606911, guid: a6ec373edb8de2d4c9db49cd985005cc, type: 3}
+  myUIPrefab: {fileID: 6221836388832857389, guid: a6ec373edb8de2d4c9db49cd985005cc, type: 3}
 --- !u!1 &8875621223594848531
 GameObject:
   m_ObjectHideFlags: 0
