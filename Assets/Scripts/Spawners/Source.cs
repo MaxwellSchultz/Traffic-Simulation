@@ -14,9 +14,9 @@ public class Source : NetworkBehaviour, IsHitReaction
     private GameObject myUI;
     private GameObject myCanvas;
     private Collider spawnCollider;
-    [SyncVar(hook = nameof(RpToggleChanged))]
+    [SyncVar(hook = nameof(ToggleChanged))]
     private bool canSpawn = true;
-    [SyncVar(hook = nameof(RpcSliderValueChanged))]
+    [SyncVar(hook = nameof(SliderValueChanged))]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
     private float timeSinceLastCar = 0;
 
@@ -105,8 +105,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     {
         rateOfCars = value;
     }
-    [ClientRpc]
-    private void RpcSliderValueChanged(float oldValue, float newValue)
+    private void SliderValueChanged(float oldValue, float newValue)
     {
         myUI.GetComponentInChildren<Slider>().value = newValue;
     }
@@ -115,8 +114,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     {
         canSpawn = state;
     }
-    [ClientRpc]
-    private void RpToggleChanged(bool oldValue, bool newValue)
+    private void ToggleChanged(bool oldValue, bool newValue)
     {
         myUI.GetComponentInChildren<Toggle>().isOn = newValue;
     }

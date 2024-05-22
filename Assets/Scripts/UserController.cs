@@ -9,6 +9,8 @@ public class UserController : NetworkBehaviour
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
     private float sensitivityMultiplier = 1;
+    [SyncVar(hook = nameof(RpcChangeSimSpeed))]
+    private float timeScale = 1;
     private Transform playerCamera;
     public Transform cameraTarget;
     public GameObject myUIPrefab;
@@ -91,19 +93,18 @@ public class UserController : NetworkBehaviour
     public void CmdChangeSimSpeed(float newSpeed)
     {
         Time.timeScale = newSpeed;
-        RpcChangeSimSpeed(newSpeed);
+        timeScale = newSpeed;
     }
-    [ClientRpc]
-    public void RpcChangeSimSpeed(float newSpeed)
+    public void RpcChangeSimSpeed(float oldSpeed, float newSpeed)
     {
         Time.timeScale = newSpeed;
-        if (myUI == null)
+        if (this.myUI == null)
         {
             Debug.LogError("myUI is null in RpcChangeSimSpeed!");
             return;
         }
 
-        Transform speedSliderTransform = myUI.transform.Find("Speed");
+        Transform speedSliderTransform = this.myUI.transform.Find("Speed");
         if (speedSliderTransform == null)
         {
             Debug.LogError("Speed slider not found!");
