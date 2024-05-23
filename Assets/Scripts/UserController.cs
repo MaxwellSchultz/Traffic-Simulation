@@ -9,8 +9,6 @@ public class UserController : NetworkBehaviour
     public float moveSpeed = 5f; // Speed of movement
     public float rotationSpeed = 100f; // Speed of rotation
     private float sensitivityMultiplier = 1;
-    [SyncVar(hook = nameof(RpcChangeSimSpeed))]
-    private float timeScale = 1;
     private Transform playerCamera;
     public Transform cameraTarget;
     public GameObject myUIPrefab;
@@ -93,9 +91,10 @@ public class UserController : NetworkBehaviour
     public void CmdChangeSimSpeed(float newSpeed)
     {
         Time.timeScale = newSpeed;
-        timeScale = newSpeed;
+        RpcChangeSimSpeed(newSpeed);
     }
-    public void RpcChangeSimSpeed(float oldSpeed, float newSpeed)
+    [ClientRpc]
+    public void RpcChangeSimSpeed(float newSpeed)
     {
         Time.timeScale = newSpeed;
         if (this.myUI == null)
