@@ -14,11 +14,10 @@ public class Source : NetworkBehaviour, IsHitReaction
     private GameObject myUI;
     private GameObject myCanvas;
     private Collider spawnCollider;
-    [SyncVar(hook = nameof(ToggleChanged))]
     private bool canSpawn = true;
-    [SyncVar(hook = nameof(SliderValueChanged))]
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
-    private float timeSinceLastCar = 10;
+    private float timeSinceLastCar = 0;
+    public int testVar = 0;
 
 
     // Method to spawn the prefab on the server
@@ -52,7 +51,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         originalMaterial = objectRenderer.material;
         myCanvas = GameObject.Find("SceneCanvas");
         spawnCollider = GetComponent<BoxCollider>();
-
         // Show UI
         myUI = Instantiate(myUIPrefab);
         myUI.SetActive(false);
@@ -70,7 +68,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         while (true)
         {
             timeSinceLastCar += Time.deltaTime;
-
             // Check if the collider is empty before spawning
             if (timeSinceLastCar >= 60 / rateOfCars && canSpawn && !IsColliderOccupied())
             {
@@ -105,8 +102,10 @@ public class Source : NetworkBehaviour, IsHitReaction
     public void CmdSliderValueChanged(float value)
     {
         rateOfCars = value;
+        RpcSliderValueChanged(value);
     }
-    private void SliderValueChanged(float oldValue, float newValue)
+    [ClientRpc]
+    private void RpcSliderValueChanged(float newValue)
     {
         myUI.GetComponentInChildren<Slider>().value = newValue;
     }
@@ -114,8 +113,10 @@ public class Source : NetworkBehaviour, IsHitReaction
     public void CmdOnToggle(bool state)
     {
         canSpawn = state;
+        RpcToggleChanged(state);
     }
-    private void ToggleChanged(bool oldValue, bool newValue)
+    [ClientRpc]
+    private void RpcToggleChanged(bool newValue)
     {
         myUI.GetComponentInChildren<Toggle>().isOn = newValue;
     }

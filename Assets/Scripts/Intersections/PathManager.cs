@@ -33,7 +33,7 @@ public class PathManager : MonoBehaviour
             LeftTurnList[i] = new List<Vector3>();
             for(int j = 0; j < leftTurnRoots[i].childCount; j++)
             {
-                print(leftTurnRoots[i].GetChild(j).gameObject);
+                // print(leftTurnRoots[i].GetChild(j).gameObject);
                 LeftTurnList[i].Add(leftTurnRoots[i].GetChild(j).position);
             }
         }

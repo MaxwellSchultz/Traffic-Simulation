@@ -31,12 +31,15 @@ public class UserInteraction : NetworkBehaviour
                     if (hitIdentity != null)
                     {
                         // Check if the object does not have previous ownership
-                        // if (hitIdentity.clientAuthorityOwner == null)
-                        // {
+                        if (!hitIdentity.isOwned)
+                        {
                             prevHit = hit.collider;
                             CmdAssignAuthority(hit.collider.GetComponent<NetworkIdentity>());
                             hitReaction.ReactToHit();
-                        // }
+                        }
+                        else {
+                            Debug.Log("object is owned");
+                        }
                     }
                 }
             }
