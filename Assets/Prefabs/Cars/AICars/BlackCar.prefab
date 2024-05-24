@@ -1,5 +1,97 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &584159031763219388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7497533946329862621}
+  - component: {fileID: 6406746615336703592}
+  - component: {fileID: 6730870379583545569}
+  - component: {fileID: 6755124757264580238}
+  - component: {fileID: 569496338312638275}
+  m_Layer: 0
+  m_Name: StopBox
+  m_TagString: StoppingBox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7497533946329862621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584159031763219388}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 2.37}
+  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1524149468822487039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6406746615336703592
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584159031763219388}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &6730870379583545569
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584159031763219388}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6755124757264580238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584159031763219388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bee4e1cbc9195f409f0b07214bde27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stopBox: {fileID: 6730870379583545569}
+  stoppingDist: 2
+  minStopping: 1.5
+--- !u!114 &569496338312638275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584159031763219388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0534c900278f434bad52a21640b05e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: Car
 --- !u!1 &668704111137028011
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,7 +239,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1524149468822487039}
   - component: {fileID: 5032671958626823153}
-  - component: {fileID: 4430408740437478448}
   - component: {fileID: 1090701752600120145}
   - component: {fileID: 6748105723710876931}
   - component: {fileID: -8704051045812064074}
@@ -175,6 +266,7 @@ Transform:
   - {fileID: 8095514480960435183}
   - {fileID: 3119807451574869667}
   - {fileID: 5787064711792915456}
+  - {fileID: 7497533946329862621}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5032671958626823153
@@ -204,19 +296,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4430408740437478448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2787879422291686075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0534c900278f434bad52a21640b05e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tagName: Car
 --- !u!114 &1090701752600120145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +319,7 @@ MonoBehaviour:
   carFront: {fileID: 5787064711792915456}
   NavMeshLayers:
   - Walkable
-  MaxSteeringAngle: 45
+  MaxSteeringAngle: 50
   MaxRPM: 150
   ShowGizmos: 1
   Debugger: 0

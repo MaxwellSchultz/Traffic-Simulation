@@ -563,7 +563,7 @@ MonoBehaviour:
   carFront: {fileID: 8759613336085875176}
   NavMeshLayers:
   - Walkable
-  MaxSteeringAngle: 45
+  MaxSteeringAngle: 50
   MaxRPM: 150
   ShowGizmos: 1
   Debugger: 0
