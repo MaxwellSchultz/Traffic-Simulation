@@ -10,13 +10,19 @@ public class StopLightManager : MonoBehaviour
 
     int lightCount = 4;
 
+    bool[] waitingOnLeft = { false, false, false, false };
     [SerializeField]
     float currentTime = 0;
     float lightTime = 500f; // time for each light cycle
-    float lightSwapTime = 100f; // time for swap
+    float lightSwapTime = 200f; // time for swap
     bool lightTransition;
 
-    LightResource[] resoruces = new LightResource[4];
+    LightResource resource;
+
+    [SerializeField]
+    GameObject[] RedLights;
+    [SerializeField]
+    GameObject[] GreenLights;
 
 
     [SerializeField]
@@ -63,7 +69,7 @@ public class StopLightManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        resoruces = GetComponentsInChildren<LightResource>();
+        resource = GetComponent<LightResource>();
         for (int i = 0; i < numQueues; i++)
         {
             //LightQueues[i] = new Queue<int>();
@@ -93,7 +99,7 @@ public class StopLightManager : MonoBehaviour
     public bool Request(int id, int intent, GameObject car) // Called to request a path
     {
         BlockTurn(id);
-        resoruces[id].AssignCar(car);
+        resource.AssignCar(car,id);
         bool canGo = false;
         if (lights[id] == LightColor.Green) // If signaled
         {
@@ -143,8 +149,8 @@ public class StopLightManager : MonoBehaviour
         for (int i = 0; i < numQueues; i++)
         {
             print(i + " " +lights[i]);
-            if (lights[i] == LightColor.Green) { CheckQueue(i); print("isGreen"); } 
-            else if (lights[i] == LightColor.GreenArrow) { CheckQueueArrow(i); print("isGreenArrow"); }
+            if (lights[i] == LightColor.Green) { CheckQueue(i); CheckWaitingOnLeft(i); } 
+            else if (lights[i] == LightColor.GreenArrow) { CheckQueueArrow(i); }
             
         }
         void CheckQueue(int id)
@@ -155,13 +161,18 @@ public class StopLightManager : MonoBehaviour
                 if (ticket < 2)
                 {
                     LightQueues[id].Dequeue();
-                    print("signaling");
+                    //print("signaling");
+                    waitingOnLeft[id] = false;
                     Intersection.Go(id);
                 }
                 else if(RequestTurn(id)) {
                     LightQueues[id].Dequeue();
-                    print("signaling");
+                    //print("signaling");
+                    waitingOnLeft[id] = false;
                     Intersection.Go(id);
+                } else
+                {
+                    waitingOnLeft[id] = true;
                 }
             }
 
@@ -174,16 +185,37 @@ public class StopLightManager : MonoBehaviour
                 if (ticket == 3)
                 {
                     LightQueues[id].Dequeue();
+                    waitingOnLeft[id] = false;
                     Intersection.Go(id);
                     
                 } else if (ticket == 4)
                 {   
 
                     LightQueues[id].Dequeue();
+                    waitingOnLeft[id] = false;
                     Intersection.Go(id);
 
                 }
             }
+            //CheckQueue(id);
+        }
+        void CheckWaitingOnLeft(int id)
+        {
+            int ticket;
+
+            if (LightQueues[id].TryPeek(out ticket))
+            {
+                if (waitingOnLeft[id] && waitingOnLeft[id >= 2 ? id - 2 : id + 2])
+                {
+                    LightQueues[id].Dequeue();
+                    waitingOnLeft[id] = false;
+                    Intersection.Go(id);
+                    LightQueues[id >= 2 ? id - 2 : id + 2].Dequeue();
+                    waitingOnLeft[id >= 2 ? id - 2 : id + 2] = false;
+                    Intersection.Go(id >= 2 ? id - 2 : id + 2);
+                }
+            }
+
 
         }
     }
@@ -219,6 +251,15 @@ public class StopLightManager : MonoBehaviour
             for (int i = 0; i < lights.Length; i++)
             {
                 lights[i] = lightStates[currentState][i];
+                if (lightStates[currentState][i] == LightColor.Green || lightStates[currentState][i] == LightColor.GreenArrow)
+                {
+                    GreenLights[i].SetActive(true);
+                    RedLights[i].SetActive(false);
+                } else
+                {
+                    GreenLights[i].SetActive(false);
+                    RedLights[i].SetActive(true);
+                }
             }
             lightTransition = false;
             //print(lightStates[currentState]);
