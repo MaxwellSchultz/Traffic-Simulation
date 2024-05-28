@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StopLightManager : MonoBehaviour
@@ -10,17 +11,20 @@ public class StopLightManager : MonoBehaviour
     int lightCount = 4;
 
     [SerializeField]
-    float lightTime = 10f; // time for each light cycle
-    float lightSwapTime = 2f; // time for swap
-    float lastLightChange;
+    float currentTime = 0;
+    float lightTime = 500f; // time for each light cycle
+    float lightSwapTime = 100f; // time for swap
     bool lightTransition;
+
+    LightResource[] resoruces = new LightResource[4];
+
 
     [SerializeField]
     Intersection Intersection;
-    Queue<Tuple<int, int>>[] LightQueues = new Queue<Tuple<int, int>>[4];
+    Queue<int>[] LightQueues = Enumerable.Range(1, 5).Select(i => new Queue<int>()).ToArray();
 
     int numQueues = 4;
-    bool[] allowLeft = new bool[4];
+    int[] allowLeft = { 0,0,0,0 };
 
     int stateCount = 4;
     int currentState;
@@ -59,19 +63,18 @@ public class StopLightManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        resoruces = GetComponentsInChildren<LightResource>();
         for (int i = 0; i < numQueues; i++)
         {
-            LightQueues[i] = new Queue<Tuple<int, int>>();
+            //LightQueues[i] = new Queue<int>();
         }
         lights = new LightColor[lightCount];
         for (int i = 0;i < lightCount;i++) // Set initial light state
         {
             lights[i] = LightColor.Red;
         }
-        lastLightChange = 0;
         lightTransition = false;
-        for (int i = 0;i<allowLeft.Length;i++)
-            allowLeft[i] = true;
+
 
         // Return to later to implement dynamic light rules
         lightStates[0] = State_1;
@@ -82,20 +85,23 @@ public class StopLightManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        currentTime++;
         CycleLights();
         CheckQueues();
     }
 
-    public bool Request(int id, int intent) // Called to request a path
+    public bool Request(int id, int intent, GameObject car) // Called to request a path
     {
+        BlockTurn(id);
+        resoruces[id].AssignCar(car);
         bool canGo = false;
         if (lights[id] == LightColor.Green) // If signaled
         {
-            if (intent < 2 || allowLeft[id]) // Right or straight || Left and Uturn Legal
+            if (intent < 2) // Right or straight
             {
                 canGo = true;
             }
-        } else if (lights[id] == LightColor.GreenArrow)
+        } /*else if (lights[id] == LightColor.GreenArrow)
         {
             if (intent == 2) // Lefts allowed
             {
@@ -104,18 +110,26 @@ public class StopLightManager : MonoBehaviour
             {
                 canGo = true;
             }
-        }
+        }*/
         if (!canGo)
         {
-            Tuple<int, int> ticket = new Tuple<int, int>(id, intent);
-            LightQueues[id].Enqueue(ticket);
-        } else
+            //print(id);
+            //print(intent);
+            LightQueues[id].Enqueue(intent);
+        } /*else
         {
-            if (LightQueues[id].Peek() == null)
+            int output;
+            if (!LightQueues[id].TryPeek(out output))
             {
+                
                 allowLeft[(id >= 2 ? id - 2 : id + 2)] = true;
             }
-        }
+            if (!allowLeft[(id >= 2 ? id - 2 : id + 2)] && intent>2)
+            {
+                canGo = false;
+                LightQueues[id].Enqueue(intent);
+            }
+        }*/
 
         return canGo;
     }
@@ -123,76 +137,78 @@ public class StopLightManager : MonoBehaviour
     {
 
     }
+
     private void CheckQueues()
     {
-        Tuple<int,int> output;
         for (int i = 0; i < numQueues; i++)
         {
-            if (lights[i] == LightColor.Green) 
-                CheckQueue(i);
-            else if (lights[i] == LightColor.GreenArrow)
-                CheckQueueArrow(i);
-            if (!LightQueues[i].TryPeek(out output))
-            {
-                allowLeft[(i >= 2 ? i - 2 : i + 2)] = true;
-            }
+            print(i + " " +lights[i]);
+            if (lights[i] == LightColor.Green) { CheckQueue(i); print("isGreen"); } 
+            else if (lights[i] == LightColor.GreenArrow) { CheckQueueArrow(i); print("isGreenArrow"); }
+            
         }
         void CheckQueue(int id)
         {
-            Tuple<int, int> ticket; 
+            int ticket; 
             if (LightQueues[id].TryPeek(out ticket))
             {
-                if (ticket.Item2 < 2 || allowLeft[id])
+                if (ticket < 2)
                 {
                     LightQueues[id].Dequeue();
-                    Intersection.Go(ticket.Item1);
+                    print("signaling");
+                    Intersection.Go(id);
+                }
+                else if(RequestTurn(id)) {
+                    LightQueues[id].Dequeue();
+                    print("signaling");
+                    Intersection.Go(id);
                 }
             }
 
         }
         void CheckQueueArrow(int id)
         {
-            Tuple<int, int> ticket;
+            int ticket;
             if (LightQueues[id].TryPeek(out ticket))
             {
-                if (ticket.Item2 == 3)
+                if (ticket == 3)
                 {
                     LightQueues[id].Dequeue();
-                    Intersection.Go(ticket.Item1);
+                    Intersection.Go(id);
                     
-                } else if (ticket.Item2 == 4 && allowLeft[id])
-                {
+                } else if (ticket == 4)
+                {   
+
                     LightQueues[id].Dequeue();
-                    Intersection.Go(ticket.Item1);
+                    Intersection.Go(id);
+
                 }
             }
 
         }
     }
     
-    
-    public void AllowLeft(int id, bool allow)
-    {
-        allowLeft[id] = allow;
-    }
     void CycleLights()
     {
-        print(Time.time);
-        print(lastLightChange);
+        //print(Time.time);
+        //print(lastLightChange);
         if (lightTransition) // Mid transition
         {
-            if (Time.time - lastLightChange > lightSwapTime)
+            if (currentTime > lightSwapTime)
             {
                 CompleteCycle();
-                lastLightChange = Time.time;
+                //lastLightChange = currentTime;
+                currentTime = 0;
             }
         }
         else // Most of the time
         {
-            if (Time.time - lastLightChange > lightTime)
+            if (currentTime > lightTime)
             {
+                //print("transitions");
                 LightTransition();
-                lastLightChange = Time.time;
+                //lastLightChange = currentTime;
+                currentTime = 0;
             }
         }
 
@@ -205,7 +221,7 @@ public class StopLightManager : MonoBehaviour
                 lights[i] = lightStates[currentState][i];
             }
             lightTransition = false;
-            print(lightStates[currentState]);
+            //print(lightStates[currentState]);
         }
         void LightTransition()
         {
@@ -218,8 +234,23 @@ public class StopLightManager : MonoBehaviour
                 }
             }
             lightTransition = true;
-            print("Yellow");
+            //print("Yellow");
         }
+    }
+    bool RequestTurn(int id)
+    {
+        int turnBlock = (id >= 2 ? id - 2 : id + 2);
+        return allowLeft[turnBlock] <= 0;
+    }
+    void BlockTurn(int id)
+    {
+        int turnBlock = (id >= 2 ? id - 2 : id + 2);
+        allowLeft[turnBlock] += 1;
+    }
+    public void ReturnPartialTurn(int id)
+    {
+        
+        allowLeft[id] -= 1;
     }
 
 }

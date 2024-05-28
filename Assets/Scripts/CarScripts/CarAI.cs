@@ -405,7 +405,7 @@ public class CarAI : MonoBehaviour
     {
         // TurnIntent angle > 4
         // TurnIntent Distance < 30
-        print(currentWayPoint + 1);
+        //print(currentWayPoint + 1);
         Vector3 nextWaypoint;
         if (waypoints.Count <= currentWayPoint + 1)
         {
