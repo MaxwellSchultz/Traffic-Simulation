@@ -36,5 +36,16 @@ public class TrafficZone : MonoBehaviour
             }
             fws.SignalIntent(id, intent, other.transform.parent.gameObject);
         }
+        if(other.CompareTag("StoppingBox"))
+        {
+            other.gameObject.GetComponentInParent<CarAI>().ForceSlowSpeed();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("StoppingBox"))
+        {
+            other.gameObject.GetComponentInParent<CarAI>().ReleaseSlowSpeed();
+        }
     }
 }

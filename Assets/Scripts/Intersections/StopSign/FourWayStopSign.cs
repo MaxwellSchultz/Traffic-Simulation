@@ -108,7 +108,9 @@ public class FourWayStopSign : Intersection
     private void LockPath(GameObject car,int id,int intent)
     {
         List<Vector3> path = PathManager.GetTurn(intent, id);
-
+        if (intent != 0) { car.GetComponent<CarAI>().LockTurnSpeed(); }
+        
+        car.GetComponent<CarAI>().ReleaseSlowSpeed();
         car.GetComponent<CarAI>().ConformToPath(path);
     }
 

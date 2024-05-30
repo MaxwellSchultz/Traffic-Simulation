@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StopLight : Intersection
@@ -23,7 +24,7 @@ public class StopLight : Intersection
 
 
     // Track Cars and Intent
-    private Tuple<GameObject, int>[] WaitingCars = new Tuple<GameObject, int>[10];
+    private Queue<Tuple<GameObject, int>>[] WaitingCars = Enumerable.Range(1, 5).Select(i => new Queue<Tuple<GameObject,int>>()).ToArray();
     private LinkedList<GameObject> AllowedCars = new LinkedList<GameObject>();
 
     private bool isWaiting;
@@ -62,18 +63,19 @@ public class StopLight : Intersection
     public override void SignalIntent(int id, int intent, GameObject car)
     {
 
-        StopLightManager.AllowLeft((id>=2?id-2:id+2), false);
-        if (!AllowedCars.Contains(car))
+        //StopLightManager.AllowLeft((id>=2?id-2:id+2), false);
+
+        Tuple<GameObject,int> ticket = new Tuple<GameObject, int>(car, intent);
+        WaitingCars[id].Enqueue(ticket);
+        bool allowedTurn = StopLightManager.Request(id, intent,car);
+        if (!allowedTurn)
         {
-            bool allowedTurn = StopLightManager.Request(id, intent);
-            if (!allowedTurn)
-            {
-                car.GetComponent<CarAI>().Stop();
-            } else
-            {
-                Go(id);
-            }
+            car.GetComponent<CarAI>().Stop();
+        } else
+        {
+            Go(id);
         }
+
 
     }
 
@@ -85,11 +87,13 @@ public class StopLight : Intersection
     }
     public override void Go(int id)
     {
-        Tuple<GameObject, int> car = WaitingCars[id];
-        LockPath(car.Item1, id, car.Item2);
-        WaitingCars[id] = null;
-        AllowedCars.AddFirst(car.Item1);
-        car.Item1.GetComponent<CarAI>().Go();
+        Tuple<GameObject, int> car;
+        if (WaitingCars[id].TryDequeue(out car))
+        {
+            LockPath(car.Item1, id, car.Item2);
+            AllowedCars.AddFirst(car.Item1);
+            car.Item1.GetComponent<CarAI>().Go();
+        }
     }
 
 
