@@ -505,13 +505,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 425362276050053848, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
+      objectReference: {fileID: 0}
+    - target: {fileID: 3032187887661637327, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6030205390680108943, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Enabled
@@ -523,6 +531,10 @@ PrefabInstance:
       objectReference: {fileID: 1694025359}
     - target: {fileID: 7504863882494367027, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806256281731176774, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8041740412754271163, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
@@ -564,6 +576,10 @@ PrefabInstance:
     - target: {fileID: 8041740412754271163, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8129144396212646974, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8689560138514553683, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: StopLightManager
@@ -1360,7 +1376,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1569501448679404927, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 45.6
+      value: 62.3
       objectReference: {fileID: 0}
     - target: {fileID: 1569501448679404927, guid: f59628b44e783f84c8fc00ceaa89a4bf, type: 3}
       propertyPath: m_LocalPosition.y

@@ -50,11 +50,16 @@ public class CarAI : MonoBehaviour
 
     private float TurnDistance = 30f;
     private float TurnIntentAngle = 3;
+    private bool TurnLock;
+    private bool slowSpeed;
+    private float slowRpm = 150;
     void Awake()
     {
         currentWayPoint = 0;
         allowMovement = true;
         move = true;
+        TurnLock = false;
+        slowSpeed = false;
     }
 
     void Restart()
@@ -288,6 +293,7 @@ public class CarAI : MonoBehaviour
         float SteeringAngle = (relativeVector.x / relativeVector.magnitude) * MaxSteeringAngle;
         if (SteeringAngle > 15) LocalMaxSpeed = 100;
         else LocalMaxSpeed = MaxRPM;
+        if ((LocalMaxSpeed >= slowRpm && (slowSpeed||TurnLock))) LocalMaxSpeed = slowRpm;
 
         frontLeft.steerAngle = SteeringAngle;
         frontRight.steerAngle = SteeringAngle;
@@ -383,6 +389,21 @@ public class CarAI : MonoBehaviour
         currentWayPoint = 0;
         allowMovement = true;
         move = true;
+        TurnLock = false;
+        slowSpeed = false;
+    }
+
+    public void LockTurnSpeed()
+    {
+        TurnLock = true;
+    }
+    public void ForceSlowSpeed()
+    {
+        slowSpeed = true;
+    }
+    public void ReleaseSlowSpeed()
+    {
+        slowSpeed = false;
     }
 
     public void ConformToPath(List<Vector3> path)
@@ -430,7 +451,7 @@ public class CarAI : MonoBehaviour
                 ReturnVal = 0;
             } else // Mag < TurnDistance
             {
-                List<Vector3> nextMoves = SeeFuture(1);
+                List<Vector3> nextMoves = SeeFuture(3);
                 bool confirm = true;
                 ReturnVal = Angle;
                 ReturnVal *= LeftOrRight(distance);
