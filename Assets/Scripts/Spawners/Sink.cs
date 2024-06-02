@@ -15,7 +15,6 @@ public class Sink : MonoBehaviour, IsHitReaction
     public int numCarsEaten = 0;
     public float totalCarsLife = 0;
     public float averageCarLife = 0;
-    
 
     void Start()
     {
@@ -63,6 +62,7 @@ public class Sink : MonoBehaviour, IsHitReaction
             Destroy(other.GetComponentInParent<CarAI>().textUI);
             DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
             numCarsEaten++;
+
         }
     }
 

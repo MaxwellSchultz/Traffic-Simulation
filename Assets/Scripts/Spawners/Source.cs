@@ -23,8 +23,6 @@ public class Source : NetworkBehaviour, IsHitReaction
     public int numCarsSpanwed = 0;
     private float totalWaitingTime = 0f;
     private float avgWaitingTime = 0f;
-    public int testVar = 0;
-
 
     // Method to spawn the prefab on the server
     [Server]
@@ -54,6 +52,7 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
         numCarsSpanwed++;
         totalWaitingTime += timeSinceLastCar;
+        SourceLogger.Instance.Log(rateOfCars + "," + avgWaitingTime);
         timeSinceLastCar = 0;
 
         spawnedPrefab.SetActive(true);
