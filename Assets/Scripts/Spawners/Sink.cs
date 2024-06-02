@@ -62,7 +62,7 @@ public class Sink : MonoBehaviour, IsHitReaction
             Destroy(other.GetComponentInParent<CarAI>().textUI);
             DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
             numCarsEaten++;
-
+            SinkLogger.Instance.Log(numCarsEaten + "," + averageCarLife);
         }
     }
 

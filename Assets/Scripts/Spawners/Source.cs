@@ -46,6 +46,7 @@ public class Source : NetworkBehaviour, IsHitReaction
             carTextUI.transform.SetParent(myCanvas.transform, false);
             carTextUI.GetComponent<FollowWorld>().lookAt = spawnedPrefab.GetComponent<Transform>();
             carAI.textUI = carTextUI;
+            
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
             int rand = Random.Range(0, gameObjects.Length);
             carAI.CustomDestination = gameObjects[rand].transform;
