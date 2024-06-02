@@ -119,8 +119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412216b315301754d831c346e9f62060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myUIPrefab: {fileID: 5766164709756638627, guid: bac582ff0f552ac4b8b13795b3c4d8fa, type: 3}
   hitMaterial: {fileID: 2100000, guid: 1f6a58a49ace2a047ac9a110713f8d45, type: 2}
+  myUIPrefab: {fileID: 5766164709756638627, guid: bac582ff0f552ac4b8b13795b3c4d8fa, type: 3}
+  textUIPrefab: {fileID: 6573638952772500437, guid: a9658b4f34ef34e5aac855f6c08b5edb, type: 3}
+  numCarsEaten: 0
+  totalCarsLife: 0
+  averageCarLife: 0
 --- !u!114 &5641058149589122013
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -321,6 +321,8 @@ MonoBehaviour:
   - Walkable
   MaxSteeringAngle: 50
   MaxRPM: 150
+  timeElapsed: 0
+  textUIPrefab: {fileID: 6573638952772500437, guid: 9dfbf9c2834cd4b56a107cc7f2bad984, type: 3}
   ShowGizmos: 1
   Debugger: 0
   Patrol: 1

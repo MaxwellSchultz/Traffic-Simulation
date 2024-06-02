@@ -208,7 +208,10 @@ MonoBehaviour:
   syncInterval: 0.11
   hitMaterial: {fileID: 2100000, guid: 1f6a58a49ace2a047ac9a110713f8d45, type: 2}
   myUIPrefab: {fileID: 2578839818858591915, guid: 5bbd8673e7384a645b0ee38bd020b9bc, type: 3}
+  textUIPrefab: {fileID: 6573638952772500437, guid: ba9f1c324168942e99a56921c3da955b, type: 3}
   prefabToSpawn: {fileID: 2787879422291686075, guid: 57e8e86a3a97da04cb48c77c4c427ab0, type: 3}
+  numCarsSpanwed: 0
+  testVar: 0
 --- !u!114 &1743877259287707238
 MonoBehaviour:
   m_ObjectHideFlags: 0

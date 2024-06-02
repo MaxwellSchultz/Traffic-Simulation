@@ -8,15 +8,21 @@ public class Source : NetworkBehaviour, IsHitReaction
 {
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
+    private GameObject myUI;
+    public GameObject textUIPrefab;
+    private GameObject textUI;
+    private GameObject carTextUI;
     public GameObject prefabToSpawn;
     private Material originalMaterial;
     private Renderer objectRenderer;
-    private GameObject myUI;
     private GameObject myCanvas;
     private Collider spawnCollider;
     private bool canSpawn = true;
     private float rateOfCars = 5; // Default rate of cars per minute that will be spawned
     private float timeSinceLastCar = 0;
+    public int numCarsSpanwed = 0;
+    private float totalWaitingTime = 0f;
+    private float avgWaitingTime = 0f;
     public int testVar = 0;
 
 
@@ -37,11 +43,19 @@ public class Source : NetworkBehaviour, IsHitReaction
         CarAI carAI = spawnedPrefab.GetComponent<CarAI>();
         if (carAI)
         {
+            carTextUI = Instantiate(carAI.textUIPrefab);
+            carTextUI.SetActive(true);
+            carTextUI.transform.SetParent(myCanvas.transform, false);
+            carTextUI.GetComponent<FollowWorld>().lookAt = spawnedPrefab.GetComponent<Transform>();
+            carAI.textUI = carTextUI;
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
             int rand = Random.Range(0, gameObjects.Length);
             carAI.CustomDestination = gameObjects[rand].transform;
         }
+        numCarsSpanwed++;
+        totalWaitingTime += timeSinceLastCar;
         timeSinceLastCar = 0;
+
         spawnedPrefab.SetActive(true);
         NetworkServer.Spawn(spawnedPrefab);
     }
@@ -56,13 +70,28 @@ public class Source : NetworkBehaviour, IsHitReaction
         myUI.SetActive(false);
         myUI.transform.SetParent(myCanvas.transform, false);
 
+        textUI = Instantiate(textUIPrefab);
+        textUI.SetActive(true);
+        textUI.transform.SetParent(myCanvas.transform, false);
+        textUI.GetComponent<FollowWorld>().lookAt = GetComponent<Transform>();
+
         // Create listeners
         myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(CmdSliderValueChanged);
         myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(CmdOnToggle);
 
         StartCoroutine(SpawnObjectCoroutine());
     }
+    
     [Server]
+    void FixedUpdate()
+    {
+        if (numCarsSpanwed != 0)
+            avgWaitingTime = totalWaitingTime / numCarsSpanwed;
+
+        textUI.GetComponent<UIText>().text.text = "# Car Spawned: " + numCarsSpanwed.ToString()
+                                                        + "\nSpawn Rate: " + rateOfCars.ToString() + "/min"
+                                                        + "\nAvg Wait: " +  avgWaitingTime.ToString("0.00");
+    }
     IEnumerator SpawnObjectCoroutine()
     {
         while (true)
