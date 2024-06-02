@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sink : MonoBehaviour, IsHitReaction
-{   
+{
     public Material hitMaterial;
     private Material originalMaterial;
     public GameObject myUIPrefab;
@@ -15,14 +15,13 @@ public class Sink : MonoBehaviour, IsHitReaction
     public int numCarsEaten = 0;
     public float totalCarsLife = 0;
     public float averageCarLife = 0;
-    
 
     void Start()
     {
         objectRenderer = GetComponent<Renderer>();
         originalMaterial = objectRenderer.material;
         myCanvas = GameObject.Find("SceneCanvas");
-        
+
         // Show UI
         myUI = Instantiate(myUIPrefab);
         myUI.SetActive(false);
@@ -37,8 +36,8 @@ public class Sink : MonoBehaviour, IsHitReaction
     {
         if (numCarsEaten != 0)
             averageCarLife = totalCarsLife / numCarsEaten;
-        
-        textUI.GetComponent<UIText>().text.text = "# Cars Eaten: " + numCarsEaten.ToString() 
+
+        textUI.GetComponent<UIText>().text.text = "# Cars Eaten: " + numCarsEaten.ToString()
                                                     + "\nAvg Lifespan: " + averageCarLife.ToString("0.00");
     }
 
@@ -63,10 +62,11 @@ public class Sink : MonoBehaviour, IsHitReaction
             Destroy(other.GetComponentInParent<CarAI>().textUI);
             DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
             numCarsEaten++;
+            SinkLogger.Instance.Log(numCarsEaten + "," + averageCarLife);
         }
     }
 
-     void DestroyParentAndChildrenRecursive(GameObject parent)
+    void DestroyParentAndChildrenRecursive(GameObject parent)
     {
         // Iterate through all child objects of the parent
         for (int i = parent.transform.childCount - 1; i >= 0; i--)

@@ -23,8 +23,6 @@ public class Source : NetworkBehaviour, IsHitReaction
     public int numCarsSpanwed = 0;
     private float totalWaitingTime = 0f;
     private float avgWaitingTime = 0f;
-    public int testVar = 0;
-
 
     // Method to spawn the prefab on the server
     [Server]
@@ -48,12 +46,14 @@ public class Source : NetworkBehaviour, IsHitReaction
             carTextUI.transform.SetParent(myCanvas.transform, false);
             carTextUI.GetComponent<FollowWorld>().lookAt = spawnedPrefab.GetComponent<Transform>();
             carAI.textUI = carTextUI;
+
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
             int rand = Random.Range(0, gameObjects.Length);
             carAI.CustomDestination = gameObjects[rand].transform;
         }
         numCarsSpanwed++;
         totalWaitingTime += timeSinceLastCar;
+        SourceLogger.Instance.Log(rateOfCars + "," + avgWaitingTime);
         timeSinceLastCar = 0;
 
         spawnedPrefab.SetActive(true);
@@ -81,7 +81,7 @@ public class Source : NetworkBehaviour, IsHitReaction
 
         StartCoroutine(SpawnObjectCoroutine());
     }
-    
+
     [Server]
     void FixedUpdate()
     {
@@ -90,7 +90,7 @@ public class Source : NetworkBehaviour, IsHitReaction
 
         textUI.GetComponent<UIText>().text.text = "# Car Spawned: " + numCarsSpanwed.ToString()
                                                         + "\nSpawn Rate: " + rateOfCars.ToString() + "/min"
-                                                        + "\nAvg Wait: " +  avgWaitingTime.ToString("0.00");
+                                                        + "\nAvg Wait: " + avgWaitingTime.ToString("0.00");
     }
     IEnumerator SpawnObjectCoroutine()
     {
