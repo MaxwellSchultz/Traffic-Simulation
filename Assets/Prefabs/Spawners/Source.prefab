@@ -189,8 +189,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.063334, y: 1.3408308, z: 3.6397834}
+  m_Center: {x: 0.14152384, y: 0.1704154, z: 0.5994823}
 --- !u!114 &4935383856852691909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +211,6 @@ MonoBehaviour:
   textUIPrefab: {fileID: 6573638952772500437, guid: ba9f1c324168942e99a56921c3da955b, type: 3}
   prefabToSpawn: {fileID: 2787879422291686075, guid: 57e8e86a3a97da04cb48c77c4c427ab0, type: 3}
   numCarsSpanwed: 0
-  testVar: 0
 --- !u!114 &1743877259287707238
 MonoBehaviour:
   m_ObjectHideFlags: 0
