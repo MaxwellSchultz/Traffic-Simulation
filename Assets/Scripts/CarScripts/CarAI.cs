@@ -48,8 +48,8 @@ public class CarAI : MonoBehaviour
     private int Fails;
     private float MovementTorque = 1;
 
-    private float TurnDistance = 30f;
-    private float TurnIntentAngle = 3;
+    private float TurnDistance =70f;
+    private float TurnIntentAngle = 45f;
     private bool TurnLock;
     private bool slowSpeed;
     private float slowRpm = 150;
@@ -131,8 +131,8 @@ public class CarAI : MonoBehaviour
                 }
             }
             else
-               CustomPath(CustomDestination);
-            
+                CustomPath(CustomDestination);
+
         }
 
         void ListOptimizer()
@@ -220,7 +220,7 @@ public class CarAI : MonoBehaviour
             if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 150, NavMeshAreaBite) &&
                 NavMesh.CalculatePath(sourcePostion, hit.position, NavMeshAreaBite, path))
             {
-                if (path.corners.ToList().Count() > 1&& CheckForAngle(path.corners[1], sourcePostion, direction))
+                if (path.corners.ToList().Count() > 1 && CheckForAngle(path.corners[1], sourcePostion, direction))
                 {
                     waypoints.AddRange(path.corners.ToList());
                     debug("Custom Path generated successfully", false);
@@ -293,7 +293,7 @@ public class CarAI : MonoBehaviour
         float SteeringAngle = (relativeVector.x / relativeVector.magnitude) * MaxSteeringAngle;
         if (SteeringAngle > 15) LocalMaxSpeed = 100;
         else LocalMaxSpeed = MaxRPM;
-        if ((LocalMaxSpeed >= slowRpm && (slowSpeed||TurnLock))) LocalMaxSpeed = slowRpm;
+        if ((LocalMaxSpeed >= slowRpm && (slowSpeed || TurnLock))) LocalMaxSpeed = slowRpm;
 
         frontLeft.steerAngle = SteeringAngle;
         frontRight.steerAngle = SteeringAngle;
@@ -331,7 +331,7 @@ public class CarAI : MonoBehaviour
             }
             else
                 ApplyBrakes();
-            
+
         }
         else
             ApplyBrakes();
@@ -418,7 +418,7 @@ public class CarAI : MonoBehaviour
     }
     public void Stop()
     {
-        allowMovement=false;
+        allowMovement = false;
         move = false;
     }
 
@@ -427,35 +427,70 @@ public class CarAI : MonoBehaviour
         // TurnIntent angle > 4
         // TurnIntent Distance < 30
         //print(currentWayPoint + 1);
-        Vector3 nextWaypoint;
+        /*Vector3 nextWaypoint;
         if (waypoints.Count <= currentWayPoint + 1)
         {
             nextWaypoint = waypoints.ElementAt(currentWayPoint);
-        } else
+        }
+        else
         {
             nextWaypoint = waypoints.ElementAt(currentWayPoint + 1);
-        }
-        if (nextWaypoint != null)
+        }*/
+        List<Vector3> nextWaypoints = SeeFuture(6);
+        float lastAngle = 0;
+        float ReturnVal = 0;
+        Vector3 distance = transform.forward;
+        float Magnitude = 0;
+        foreach (var waypoint in waypoints)
         {
-            float ReturnVal;
-            Vector3 distance = (nextWaypoint - gameObject.transform.position).normalized;
-            float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
-            float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
-            float Magnitude = (nextWaypoint - gameObject.transform.position).magnitude;
+            if (Magnitude < TurnDistance)
+            {
+                distance = (waypoint - gameObject.transform.position).normalized;
+                float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
+                float Angle = Mathf.Acos(CosAngle) * Mathf.Rad2Deg;
+                Magnitude = (waypoint - gameObject.transform.position).magnitude;
+                if (Angle < TurnIntentAngle) { ReturnVal = 0; }
+                else
+                {
+                    if (Angle < lastAngle) { ReturnVal = 0; } else { ReturnVal = Angle; }
+
+                }
+            }
+        }
+        if ( ReturnVal != 0)
+        {
+            ReturnVal *= LeftOrRight(distance);
+            if (CheckUTurn() && ReturnVal < 0)
+            {
+                ReturnVal = 720;
+            }
+        }
+        return ReturnVal;
+
+
+
+
+
+        /*if (nextWaypoint != null)
+        {
+
 
             if (Angle < TurnIntentAngle)
             {
                 ReturnVal = 0; // Signal Straight
-            } else if (Magnitude > TurnDistance)
+            }
+            else if (Magnitude > TurnDistance)
             {
                 ReturnVal = 0;
-            } else // Mag < TurnDistance
+            }
+            else // Mag < TurnDistance
             {
-                List<Vector3> nextMoves = SeeFuture(3);
+                List<Vector3> nextMoves = SeeFuture(2);
                 bool confirm = true;
                 ReturnVal = Angle;
+
                 ReturnVal *= LeftOrRight(distance);
-                if (CheckUTurn()&&ReturnVal<0)
+                if (CheckUTurn() && ReturnVal < 0)
                 {
                     ReturnVal = 720;
                 }
@@ -467,7 +502,7 @@ public class CarAI : MonoBehaviour
                         float nextCosAngle = Vector3.Dot(nextDist, gameObject.transform.forward);
                         float nextAngle = Mathf.Acos(nextCosAngle) * Mathf.Rad2Deg;
                         float nextMag = (nextMoves[i] - gameObject.transform.position).magnitude;
-                        if (nextMag < (TurnDistance)&&nextAngle>TurnIntentAngle)
+                        if (nextAngle > lastAngle)
                         {
                             confirm = true;
                         }
@@ -475,6 +510,7 @@ public class CarAI : MonoBehaviour
                         {
                             confirm = false;
                         }
+                        lastAngle = nextAngle;
                     }
                     if (!confirm)
                     {
@@ -486,6 +522,7 @@ public class CarAI : MonoBehaviour
             return ReturnVal;
         }
         else return 0;
+        */
         int LeftOrRight(Vector3 move)
         {
             int Intent;
@@ -494,7 +531,8 @@ public class CarAI : MonoBehaviour
             if (Left > Right)
             {
                 Intent = -1;
-            } else
+            }
+            else
             {
                 Intent = 1;
             }
@@ -512,7 +550,7 @@ public class CarAI : MonoBehaviour
             float smallestCast = float.MaxValue;
             float currentCast;
             float backCast;
-            for (int i = 0; i < nextMoves.Count-1;i++)
+            for (int i = 0; i < nextMoves.Count - 1; i++)
             {
                 if ((nextMoves[i] - pos).magnitude > TurnDistance)
                 {
@@ -525,14 +563,14 @@ public class CarAI : MonoBehaviour
                     break;
                 }
                 smallestCast = currentCast;
-                dist = (nextMoves[i+1] - gameObject.transform.position).normalized;
+                dist = (nextMoves[i + 1] - gameObject.transform.position).normalized;
                 backCast = Vector3.Dot(dist, back);
                 if (backCast > smallestCast)
                 {
                     Attempt = true;
                     break;
                 }
-                
+
 
             }
             return Attempt;
@@ -542,7 +580,7 @@ public class CarAI : MonoBehaviour
             List<Vector3> See = new List<Vector3>();
             int foreSight = i;
             int current = currentWayPoint;
-            while (current < waypoints.Count && current-currentWayPoint < foreSight)
+            while (current < waypoints.Count && current - currentWayPoint < foreSight)
             {
                 See.Add(waypoints[current]);
                 current++;
