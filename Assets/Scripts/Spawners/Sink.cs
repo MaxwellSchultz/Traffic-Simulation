@@ -55,7 +55,7 @@ public class Sink : MonoBehaviour, IsHitReaction
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger enter car " + other.gameObject.tag);
+        //Debug.Log("Trigger enter car " + other.gameObject.tag);
         if (other.gameObject.CompareTag("Car"))
         {
             totalCarsLife += other.GetComponentInParent<CarAI>().timeElapsed;
