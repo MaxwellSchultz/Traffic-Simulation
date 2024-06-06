@@ -47,7 +47,7 @@ public class CarAI : MonoBehaviour
     private float LocalMaxSpeed;
     private int Fails;
     private float MovementTorque = 1;
-
+    public float initialTime;
     private float TurnDistance =70f;
     private float TurnIntentAngle = 45f;
     private bool TurnLock;
@@ -69,6 +69,7 @@ public class CarAI : MonoBehaviour
 
     void Start()
     {
+        initialTime = Time.time;
         GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
         CalculateNavMashLayerBite();
     }

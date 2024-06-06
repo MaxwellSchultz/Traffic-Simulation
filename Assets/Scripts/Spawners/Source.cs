@@ -47,8 +47,8 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
 
         numCarsSpanwed++;
-        averageCalculator.AddValue();
-        SourceLogger.Instance.Log(rateOfCars + "," + averageCalculator.CalculateMovingAverage());
+        averageCalculator.AddValue(0);
+        SourceLogger.Instance.Log(rateOfCars + "," + averageCalculator.CalculateMovingSum(Time.time));
         timeSinceLastCar = 0;
         UpdateUI();
 
@@ -73,13 +73,12 @@ public class Source : NetworkBehaviour, IsHitReaction
         StartCoroutine(SpawnObjectCoroutine());
     }
 
-    [Server]
     void UpdateUI()
     {
 
         myUI.transform.Find("StatsText").GetComponent<TextMeshProUGUI>().text = "Number of Car Spawned: " + numCarsSpanwed.ToString()
                                                         + "\nTarget Spawn Rate: " + (60 / (60 / rateOfCars)) + "/min"
-                                                        + "\nCurrent Avg Spawn Rate: " + averageCalculator.CalculateMovingAverage().ToString() + "/min";
+                                                        + "\nCurrent Avg Spawn Rate: " + averageCalculator.CalculateMovingSum(Time.time).ToString() + "/min";
     }
     IEnumerator SpawnObjectCoroutine()
     {

@@ -14,8 +14,7 @@ public class Sink : MonoBehaviour, IsHitReaction
     private GameObject myCanvas;
     private Renderer objectRenderer;
     public int numCarsEaten = 0;
-    public float totalCarsLife = 0;
-    public float averageCarLife = 0;
+    private MovingAverageCalculator averageCalculator = new MovingAverageCalculator();
 
     void Start()
     {
@@ -30,11 +29,8 @@ public class Sink : MonoBehaviour, IsHitReaction
     }
     void UpdateUI()
     {
-        if (numCarsEaten != 0)
-            averageCarLife = totalCarsLife / numCarsEaten;
-
         myUI.GetComponentInChildren<TextMeshProUGUI>().text = "# Cars Eaten: " + numCarsEaten.ToString()
-                                                    + "\nAvg Lifespan: " + averageCarLife.ToString("0.00");
+                                                    + "\nAvg Lifespan: " + averageCalculator.CalculateMovingAverage(Time.time).ToString("0.00");
     }
 
     public void ReactToHit()
@@ -55,11 +51,11 @@ public class Sink : MonoBehaviour, IsHitReaction
         //Debug.Log("Trigger enter car " + other.gameObject.tag);
         if (other.gameObject.CompareTag("Car"))
         {
-            // totalCarsLife += other.GetComponentInParent<CarAI>().timeElapsed;
+            averageCalculator.AddValue(Time.time - other.GetComponentInParent<CarAI>().initialTime);
+            numCarsEaten++;
             UpdateUI();
             DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
-            numCarsEaten++;
-            SinkLogger.Instance.Log(numCarsEaten + "," + averageCarLife);
+            SinkLogger.Instance.Log(numCarsEaten + "," + averageCalculator.CalculateMovingAverage(Time.time));
         }
     }
 
