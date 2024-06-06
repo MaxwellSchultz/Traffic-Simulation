@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Sink : MonoBehaviour, IsHitReaction
 {
@@ -26,23 +27,19 @@ public class Sink : MonoBehaviour, IsHitReaction
         myUI = Instantiate(myUIPrefab);
         myUI.SetActive(false);
         myUI.transform.SetParent(myCanvas.transform, false);
-
-        textUI = Instantiate(textUIPrefab);
-        textUI.SetActive(true);
-        textUI.transform.SetParent(myCanvas.transform, false);
-        textUI.GetComponent<FollowWorld>().lookAt = GetComponent<Transform>();
     }
-    void FixedUpdate()
+    void UpdateUI()
     {
         if (numCarsEaten != 0)
             averageCarLife = totalCarsLife / numCarsEaten;
 
-        textUI.GetComponent<UIText>().text.text = "# Cars Eaten: " + numCarsEaten.ToString()
+        myUI.GetComponentInChildren<TextMeshProUGUI>().text = "# Cars Eaten: " + numCarsEaten.ToString()
                                                     + "\nAvg Lifespan: " + averageCarLife.ToString("0.00");
     }
 
     public void ReactToHit()
     {
+        UpdateUI();
         objectRenderer.material = hitMaterial;
         myUI.SetActive(true);
     }
@@ -58,8 +55,8 @@ public class Sink : MonoBehaviour, IsHitReaction
         //Debug.Log("Trigger enter car " + other.gameObject.tag);
         if (other.gameObject.CompareTag("Car"))
         {
-            totalCarsLife += other.GetComponentInParent<CarAI>().timeElapsed;
-            Destroy(other.GetComponentInParent<CarAI>().textUI);
+            // totalCarsLife += other.GetComponentInParent<CarAI>().timeElapsed;
+            UpdateUI();
             DestroyParentAndChildrenRecursive(other.transform.parent.gameObject);
             numCarsEaten++;
             SinkLogger.Instance.Log(numCarsEaten + "," + averageCarLife);

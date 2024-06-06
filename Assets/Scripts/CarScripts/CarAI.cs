@@ -29,9 +29,6 @@ public class CarAI : MonoBehaviour
     public int MaxRPM = 150;
 
     [Header("Debug")]
-    public float timeElapsed = 0f;
-    public GameObject textUIPrefab;
-    public GameObject textUI;
     public bool ShowGizmos;
     public bool Debugger;
 
@@ -78,8 +75,6 @@ public class CarAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        timeElapsed += Time.deltaTime;
-        textUI.GetComponent<UIText>().text.text = "Elapsed: " + timeElapsed.ToString("0.00");
         UpdateWheels();
         ApplySteering();
         PathProgress();

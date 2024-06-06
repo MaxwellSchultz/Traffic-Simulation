@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 public class Source : NetworkBehaviour, IsHitReaction
 {
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
     private GameObject myUI;
-    public GameObject textUIPrefab;
-    private GameObject textUI;
     private GameObject carTextUI;
     public GameObject prefabToSpawn;
     private Material originalMaterial;
@@ -41,20 +40,17 @@ public class Source : NetworkBehaviour, IsHitReaction
         CarAI carAI = spawnedPrefab.GetComponent<CarAI>();
         if (carAI)
         {
-            carTextUI = Instantiate(carAI.textUIPrefab);
-            carTextUI.SetActive(true);
-            carTextUI.transform.SetParent(myCanvas.transform, false);
-            carTextUI.GetComponent<FollowWorld>().lookAt = spawnedPrefab.GetComponent<Transform>();
-            carAI.textUI = carTextUI;
 
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
             int rand = Random.Range(0, gameObjects.Length);
             carAI.CustomDestination = gameObjects[rand].transform;
         }
+
         numCarsSpanwed++;
         totalWaitingTime += timeSinceLastCar;
         SourceLogger.Instance.Log(rateOfCars + "," + avgWaitingTime);
         timeSinceLastCar = 0;
+        UpdateUI();
 
         spawnedPrefab.SetActive(true);
         NetworkServer.Spawn(spawnedPrefab);
@@ -70,11 +66,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         myUI.SetActive(false);
         myUI.transform.SetParent(myCanvas.transform, false);
 
-        textUI = Instantiate(textUIPrefab);
-        textUI.SetActive(true);
-        textUI.transform.SetParent(myCanvas.transform, false);
-        textUI.GetComponent<FollowWorld>().lookAt = GetComponent<Transform>();
-
         // Create listeners
         myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(CmdSliderValueChanged);
         myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(CmdOnToggle);
@@ -83,14 +74,15 @@ public class Source : NetworkBehaviour, IsHitReaction
     }
 
     [Server]
-    void FixedUpdate()
+    void UpdateUI()
     {
         if (numCarsSpanwed != 0)
             avgWaitingTime = totalWaitingTime / numCarsSpanwed;
 
-        textUI.GetComponent<UIText>().text.text = "# Car Spawned: " + numCarsSpanwed.ToString()
+        myUI.transform.Find("StatsText").GetComponent<TextMeshProUGUI>().text = "# Car Spawned: " + numCarsSpanwed.ToString()
                                                         + "\nSpawn Rate: " + rateOfCars.ToString() + "/min"
                                                         + "\nAvg Wait: " + avgWaitingTime.ToString("0.00");
+        Debug.Log(myUI.transform.Find("StatsText"));
     }
     IEnumerator SpawnObjectCoroutine()
     {
@@ -119,6 +111,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     }
     public void ReactToHit()
     {
+        UpdateUI();
         objectRenderer.material = hitMaterial;
         myUI.SetActive(true);
     }
