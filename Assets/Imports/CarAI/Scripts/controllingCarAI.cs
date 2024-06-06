@@ -22,11 +22,6 @@ public class controllingCarAI : MonoBehaviour
         //4- Set the NavMesh Layer name
         carAI.NavMeshLayers[index] = "LayerName";
 
-        //5- Show Gizmos
-        carAI.ShowGizmos = true;
-        //or hide Gizmos
-        carAI.ShowGizmos = false;
-
         //6- Allow thr car to move
         carAI.move = true;
         //or apply brakes

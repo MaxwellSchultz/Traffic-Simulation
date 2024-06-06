@@ -21,7 +21,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     private float timeSinceLastCar = 0;
     public int numCarsSpanwed = 0;
     private float totalWaitingTime = 0f;
-    private float avgWaitingTime = 0f;
+    private MovingAverageCalculator averageCalculator = new MovingAverageCalculator();
 
     // Method to spawn the prefab on the server
     [Server]
@@ -47,8 +47,8 @@ public class Source : NetworkBehaviour, IsHitReaction
         }
 
         numCarsSpanwed++;
-        totalWaitingTime += timeSinceLastCar;
-        SourceLogger.Instance.Log(rateOfCars + "," + avgWaitingTime);
+        averageCalculator.AddValue();
+        SourceLogger.Instance.Log(rateOfCars + "," + averageCalculator.CalculateMovingAverage());
         timeSinceLastCar = 0;
         UpdateUI();
 
@@ -76,13 +76,10 @@ public class Source : NetworkBehaviour, IsHitReaction
     [Server]
     void UpdateUI()
     {
-        if (numCarsSpanwed != 0)
-            avgWaitingTime = totalWaitingTime / numCarsSpanwed;
 
-        myUI.transform.Find("StatsText").GetComponent<TextMeshProUGUI>().text = "# Car Spawned: " + numCarsSpanwed.ToString()
-                                                        + "\nSpawn Rate: " + rateOfCars.ToString() + "/min"
-                                                        + "\nAvg Wait: " + avgWaitingTime.ToString("0.00");
-        Debug.Log(myUI.transform.Find("StatsText"));
+        myUI.transform.Find("StatsText").GetComponent<TextMeshProUGUI>().text = "Number of Car Spawned: " + numCarsSpanwed.ToString()
+                                                        + "\nTarget Spawn Rate: " + (60 / (60 / rateOfCars)) + "/min"
+                                                        + "\nCurrent Avg Spawn Rate: " + averageCalculator.CalculateMovingAverage().ToString() + "/min";
     }
     IEnumerator SpawnObjectCoroutine()
     {
@@ -124,22 +121,26 @@ public class Source : NetworkBehaviour, IsHitReaction
     public void CmdSliderValueChanged(float value)
     {
         rateOfCars = value;
+        UpdateUI();
         RpcSliderValueChanged(value);
     }
     [ClientRpc]
     private void RpcSliderValueChanged(float newValue)
     {
         myUI.GetComponentInChildren<Slider>().value = newValue;
+        UpdateUI();
     }
     [Command]
     public void CmdOnToggle(bool state)
     {
         canSpawn = state;
+        UpdateUI();
         RpcToggleChanged(state);
     }
     [ClientRpc]
     private void RpcToggleChanged(bool newValue)
     {
+        UpdateUI();
         myUI.GetComponentInChildren<Toggle>().isOn = newValue;
     }
     public void OnDestroy()
