@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 public class Source : NetworkBehaviour, IsHitReaction
 {
     public Material hitMaterial; // Reference to the material to be applied when hit
     public GameObject myUIPrefab;
     private GameObject myUI;
-    public GameObject textUIPrefab;
-    private GameObject textUI;
     private GameObject carTextUI;
     public GameObject prefabToSpawn;
     private Material originalMaterial;
@@ -22,7 +21,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     private float timeSinceLastCar = 0;
     public int numCarsSpanwed = 0;
     private float totalWaitingTime = 0f;
-    private float avgWaitingTime = 0f;
+    private MovingAverageCalculator averageCalculator = new MovingAverageCalculator();
 
     // Method to spawn the prefab on the server
     [Server]
@@ -41,20 +40,17 @@ public class Source : NetworkBehaviour, IsHitReaction
         CarAI carAI = spawnedPrefab.GetComponent<CarAI>();
         if (carAI)
         {
-            carTextUI = Instantiate(carAI.textUIPrefab);
-            carTextUI.SetActive(true);
-            carTextUI.transform.SetParent(myCanvas.transform, false);
-            carTextUI.GetComponent<FollowWorld>().lookAt = spawnedPrefab.GetComponent<Transform>();
-            carAI.textUI = carTextUI;
 
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Sink");
             int rand = Random.Range(0, gameObjects.Length);
             carAI.CustomDestination = gameObjects[rand].transform;
         }
+
         numCarsSpanwed++;
-        totalWaitingTime += timeSinceLastCar;
-        SourceLogger.Instance.Log(rateOfCars + "," + avgWaitingTime);
+        averageCalculator.AddValue(0);
+        SourceLogger.Instance.Log(rateOfCars + "," + averageCalculator.CalculateMovingSum(Time.time));
         timeSinceLastCar = 0;
+        UpdateUI();
 
         spawnedPrefab.SetActive(true);
         NetworkServer.Spawn(spawnedPrefab);
@@ -70,11 +66,6 @@ public class Source : NetworkBehaviour, IsHitReaction
         myUI.SetActive(false);
         myUI.transform.SetParent(myCanvas.transform, false);
 
-        textUI = Instantiate(textUIPrefab);
-        textUI.SetActive(true);
-        textUI.transform.SetParent(myCanvas.transform, false);
-        textUI.GetComponent<FollowWorld>().lookAt = GetComponent<Transform>();
-
         // Create listeners
         myUI.GetComponentInChildren<Slider>().onValueChanged.AddListener(CmdSliderValueChanged);
         myUI.GetComponentInChildren<Toggle>().onValueChanged.AddListener(CmdOnToggle);
@@ -82,15 +73,12 @@ public class Source : NetworkBehaviour, IsHitReaction
         StartCoroutine(SpawnObjectCoroutine());
     }
 
-    [Server]
-    void FixedUpdate()
+    void UpdateUI()
     {
-        if (numCarsSpanwed != 0)
-            avgWaitingTime = totalWaitingTime / numCarsSpanwed;
 
-        textUI.GetComponent<UIText>().text.text = "# Car Spawned: " + numCarsSpanwed.ToString()
-                                                        + "\nSpawn Rate: " + rateOfCars.ToString() + "/min"
-                                                        + "\nAvg Wait: " + avgWaitingTime.ToString("0.00");
+        myUI.transform.Find("StatsText").GetComponent<TextMeshProUGUI>().text = "Number of Car Spawned: " + numCarsSpanwed.ToString()
+                                                        + "\nTarget Spawn Rate: " + (60 / (60 / rateOfCars)) + "/min"
+                                                        + "\nCurrent Avg Spawn Rate: " + averageCalculator.CalculateMovingSum(Time.time).ToString() + "/min";
     }
     IEnumerator SpawnObjectCoroutine()
     {
@@ -119,6 +107,7 @@ public class Source : NetworkBehaviour, IsHitReaction
     }
     public void ReactToHit()
     {
+        UpdateUI();
         objectRenderer.material = hitMaterial;
         myUI.SetActive(true);
     }
@@ -131,22 +120,26 @@ public class Source : NetworkBehaviour, IsHitReaction
     public void CmdSliderValueChanged(float value)
     {
         rateOfCars = value;
+        UpdateUI();
         RpcSliderValueChanged(value);
     }
     [ClientRpc]
     private void RpcSliderValueChanged(float newValue)
     {
         myUI.GetComponentInChildren<Slider>().value = newValue;
+        UpdateUI();
     }
     [Command]
     public void CmdOnToggle(bool state)
     {
         canSpawn = state;
+        UpdateUI();
         RpcToggleChanged(state);
     }
     [ClientRpc]
     private void RpcToggleChanged(bool newValue)
     {
+        UpdateUI();
         myUI.GetComponentInChildren<Toggle>().isOn = newValue;
     }
     public void OnDestroy()
