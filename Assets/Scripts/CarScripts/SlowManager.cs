@@ -14,7 +14,7 @@ public class SlowManager : MonoBehaviour
     [SerializeField]
     private float stoppingDist = 5f; // Depends on car (Maybe find a way to get by weight?
     [SerializeField]
-    private float minStopping = 8f; // Change this to lane width
+    public float minStopping = 8f; // Change this to lane width
 
     // Holder Variables
     private Vector3 velocity;
@@ -56,6 +56,8 @@ public class SlowManager : MonoBehaviour
         // Lane width
         // Stopping distance * speed component
         fComponent = Math.Max(minStopping, fComponent);
+
+        
         // Adjust size of collider
         oldScale = stopBox.transform.localScale;
         oldPos = stopBox.transform.localPosition;

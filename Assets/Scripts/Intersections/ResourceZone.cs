@@ -11,7 +11,7 @@ public class ResourceZone : MonoBehaviour
     // Start is called before the first frame update
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Car")) 
-            resourceManager.ReturnPartialTurn(id);
+        if (other.CompareTag("Car"))
+        { resourceManager.ReturnPartialTurn(id); }
     }
 }
