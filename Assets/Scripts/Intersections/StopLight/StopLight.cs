@@ -55,6 +55,7 @@ public class StopLight : Intersection
             other.GetComponentInParent<CarAI>().ReBakePath();
             other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(true);
             AllowedCars.Remove(other.gameObject);
+            StopLightManager.TellClear(other.gameObject);
             /*other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
             TrackedCars.Remove(other.gameObject);
             StopWaiting();*/
@@ -91,6 +92,7 @@ public class StopLight : Intersection
         if (WaitingCars[id].TryDequeue(out car))
         {
             LockPath(car.Item1, id, car.Item2);
+            StopLightManager.TellNotClear(car.Item1, car.Item2);
             AllowedCars.AddFirst(car.Item1);
             car.Item1.GetComponent<CarAI>().Go();
         }

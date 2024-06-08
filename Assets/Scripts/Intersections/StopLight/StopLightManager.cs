@@ -10,12 +10,15 @@ public class StopLightManager : MonoBehaviour
 
     int lightCount = 4;
 
-    bool[] waitingOnLeft = { false, false, false, false };
+    bool[] waitingOnLeft = new bool[4]{ false, false, false, false };
     [SerializeField]
     float currentTime = 0;
     float lightTime = 500f; // time for each light cycle
     float lightSwapTime = 200f; // time for swap
     bool lightTransition;
+
+    GameObject[] InIntersection = new GameObject[4] { null, null, null, null };
+    bool[] Blocked = new bool[4] {false,false, false, false};
 
     LightResource resource;
 
@@ -32,31 +35,45 @@ public class StopLightManager : MonoBehaviour
     int numQueues = 4;
     int[] allowLeft = { 0,0,0,0 };
 
-    int stateCount = 4;
+    int stateCount = 6;
     int currentState;
-    LightColor[][] lightStates = new LightColor[4][];
+    LightColor[][] lightStates = new LightColor[6][];
     LightColor[] State_1 = 
     { 
-        LightColor.GreenArrow,
+        LightColor.Red,
         LightColor.Red,
         LightColor.GreenArrow,
         LightColor.Red,
     };
-    LightColor[] State_2 = 
+    LightColor[] State_2 =
+{
+        LightColor.GreenArrow,
+        LightColor.Red,
+        LightColor.Red,
+        LightColor.Red,
+    };
+    LightColor[] State_3 = 
     {
         LightColor.Green,
         LightColor.Red,
         LightColor.Green,
         LightColor.Red,
-    };
-    LightColor[] State_3 =
-    {
-        LightColor.Red,
-        LightColor.GreenArrow,
-        LightColor.Red,
-        LightColor.GreenArrow,
     };
     LightColor[] State_4 =
+    {
+        LightColor.Red,
+        LightColor.Red,
+        LightColor.Red,
+        LightColor.GreenArrow,
+    };
+    LightColor[] State_5 =
+    {
+        LightColor.Red,
+        LightColor.GreenArrow,
+        LightColor.Red,
+        LightColor.Red,
+    };
+    LightColor[] State_6 =
     {
         LightColor.Red,
         LightColor.Green,
@@ -87,6 +104,8 @@ public class StopLightManager : MonoBehaviour
         lightStates[1] = State_2;
         lightStates[2] = State_3;
         lightStates[3] = State_4;
+        lightStates[4] = State_5;
+        lightStates[5] = State_6;
         currentState = 0;
     }
     private void FixedUpdate()
@@ -94,6 +113,16 @@ public class StopLightManager : MonoBehaviour
         currentTime++;
         CycleLights();
         CheckQueues();
+    }
+
+    public void TellClear(GameObject car)
+    {
+        for (int i = 0; i < InIntersection.Length; i++) { if (InIntersection[i] == car) { InIntersection[i] = null; Blocked[i] = false; } } 
+    }
+    public void TellNotClear(GameObject car, int id)
+    {
+        InIntersection[id] = car;
+        Blocked[id] = true; 
     }
 
     public bool Request(int id, int intent, GameObject car) // Called to request a path
@@ -106,6 +135,7 @@ public class StopLightManager : MonoBehaviour
             if (intent < 2) // Right or straight
             {
                 canGo = true;
+                Blocked[id] = true;
             }
         } /*else if (lights[id] == LightColor.GreenArrow)
         {
@@ -163,17 +193,17 @@ public class StopLightManager : MonoBehaviour
                     LightQueues[id].Dequeue();
                     //print("signaling");
                     waitingOnLeft[id] = false;
-                    Intersection.Go(id);
+                    Go(id);
                 }
-                else if(RequestTurn(id)) {
-                    LightQueues[id].Dequeue();
-                    //print("signaling");
-                    waitingOnLeft[id] = false;
-                    Intersection.Go(id);
-                } else
+                else
                 {
                     waitingOnLeft[id] = true;
                 }
+                /*else if(RequestTurn(id)) {
+                    LightQueues[id].Dequeue();
+                    //print("signaling");
+                    waitingOnLeft[id] = false;
+                    Intersection.Go(id);*/
             }
 
         }
@@ -182,20 +212,12 @@ public class StopLightManager : MonoBehaviour
             int ticket;
             if (LightQueues[id].TryPeek(out ticket))
             {
-                if (ticket == 3)
-                {
-                    LightQueues[id].Dequeue();
-                    waitingOnLeft[id] = false;
-                    Intersection.Go(id);
+
+                LightQueues[id].Dequeue();
+                waitingOnLeft[id] = false;
+                Go(id);
                     
-                } else if (ticket == 4)
-                {   
 
-                    LightQueues[id].Dequeue();
-                    waitingOnLeft[id] = false;
-                    Intersection.Go(id);
-
-                }
             }
             //CheckQueue(id);
         }
@@ -205,14 +227,29 @@ public class StopLightManager : MonoBehaviour
 
             if (LightQueues[id].TryPeek(out ticket))
             {
-                if (waitingOnLeft[id] && waitingOnLeft[id >= 2 ? id - 2 : id + 2])
+                int opposite = id >= 2 ? id - 2 : id + 2;
+                if (waitingOnLeft[id] && !Blocked[opposite])
                 {
                     LightQueues[id].Dequeue();
                     waitingOnLeft[id] = false;
-                    Intersection.Go(id);
-                    LightQueues[id >= 2 ? id - 2 : id + 2].Dequeue();
-                    waitingOnLeft[id >= 2 ? id - 2 : id + 2] = false;
-                    Intersection.Go(id >= 2 ? id - 2 : id + 2);
+                    Go(id);
+                    //LightQueues[id >= 2 ? id - 2 : id + 2].Dequeue();
+                    //waitingOnLeft[id >= 2 ? id - 2 : id + 2] = false;
+                    //Intersection.Go(id >= 2 ? id - 2 : id + 2);
+                } else if (waitingOnLeft[id] && waitingOnLeft[opposite])
+                {
+                    int rand = UnityEngine.Random.Range(0, 2);
+                    if (rand == 0)
+                    {
+                        LightQueues[id].Dequeue();
+                        waitingOnLeft[id] = false;
+                        Go(id);
+                    } else
+                    {
+                        LightQueues[opposite].Dequeue();
+                        waitingOnLeft[opposite] = false;
+                        Go(opposite);
+                    }
                 }
             }
 
@@ -277,6 +314,11 @@ public class StopLightManager : MonoBehaviour
             lightTransition = true;
             //print("Yellow");
         }
+    }
+    void Go(int index)
+    {
+        Blocked[index] = true;
+        Intersection.Go(index);
     }
     bool RequestTurn(int id)
     {

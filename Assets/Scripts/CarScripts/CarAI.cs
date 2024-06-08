@@ -46,6 +46,8 @@ public class CarAI : MonoBehaviour
     private List<Vector3> waypoints = new List<Vector3>();
     private float LocalMaxSpeed;
     private int Fails;
+    public bool FailFOV;
+    public bool FailInvalid;
     private float MovementTorque = 1;
     public float initialTime;
     private float TurnDistance =70f;
@@ -69,6 +71,8 @@ public class CarAI : MonoBehaviour
 
     void Start()
     {
+        FailFOV = false;
+        FailInvalid = false;
         initialTime = Time.time;
         GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
         CalculateNavMashLayerBite();
@@ -187,6 +191,7 @@ public class CarAI : MonoBehaviour
                     else
                     {
                         debug("Failed to generate a random path. Waypoints are outside the AIFOV. Generating a new one", false);
+                        FailFOV = true;
                         Fails++;
                     }
                 }
@@ -194,6 +199,7 @@ public class CarAI : MonoBehaviour
             else
             {
                 debug("Failed to generate a random path. Invalid Path. Generating a new one", false);
+                FailInvalid = true;
                 Fails++;
             }
         }
@@ -236,6 +242,7 @@ public class CarAI : MonoBehaviour
                     else
                     {
                         debug("Failed to generate a Custom path. Waypoints are outside the AIFOV. Generating a new one", false);
+                        FailFOV = true;
                         Fails++;
                     }
                 }
@@ -243,6 +250,7 @@ public class CarAI : MonoBehaviour
             else
             {
                 debug("Failed to generate a Custom path. Invalid Path. Generating a new one", false);
+                FailInvalid = true;
                 Fails++;
             }
         }
