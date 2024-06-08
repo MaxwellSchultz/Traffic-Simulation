@@ -1092,7 +1092,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8692234425093500647}
   - component: {fileID: 4935708141340423735}
-  - component: {fileID: 6201607856809136224}
   m_Layer: 0
   m_Name: TrafficCircle
   m_TagString: Untagged
@@ -1139,23 +1138,6 @@ MonoBehaviour:
   - {fileID: 5366587835217192870}
   - {fileID: 4303203010332087336}
   exitRoot: {fileID: 5825050686292447181}
---- !u!114 &6201607856809136224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7567910888700610550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c696d31bd9bd33f4db4c42aac98bd1b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NavManager: {fileID: 0}
-  PathManager: {fileID: 0}
-  IntersectionResourceManager: {fileID: 0}
-  IntersectionBlocks: []
-  Paths: []
 --- !u!1 &7620831866325074876
 GameObject:
   m_ObjectHideFlags: 0
