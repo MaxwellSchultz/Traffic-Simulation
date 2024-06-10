@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -273,10 +273,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 481347905}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -741,17 +737,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 870944010}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8041740412754271163, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3010,10 +2998,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 993990739}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -3319,10 +3303,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 819897024}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt (2)
@@ -5354,10 +5334,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1713021576}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -6205,10 +6181,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 819897024}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt (1)
@@ -6333,10 +6305,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1466119101}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -9226,10 +9194,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 405797524}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -10354,17 +10318,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 870944010}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
-      objectReference: {fileID: 0}
-    - target: {fileID: 4865636836273213610, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8041740412754271163, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11097,10 +11053,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1909742965}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -11391,7 +11343,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1410075754
 Transform:
   m_ObjectHideFlags: 0
@@ -11714,7 +11666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1460435350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13222,10 +13174,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1581083064}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -14244,10 +14192,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 870944010}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt (1)
@@ -14638,7 +14582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1701182919
 Transform:
   m_ObjectHideFlags: 0
@@ -14787,10 +14731,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 38783520}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -15761,10 +15701,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 819897024}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -16721,10 +16657,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 142773033}
     m_Modifications:
-    - target: {fileID: 1093712385196918439, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2148537117870276566, guid: af2aa2ba5234af2478a5e93c91e7d8e4, type: 3}
       propertyPath: m_Name
       value: IntersectionBuilt
@@ -17549,7 +17481,7 @@ TerrainCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 0b2631fc51461461dbfcfaf24f8f919f, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 8d9bb8b98cb6345168d3396b7fe9e197, type: 2}
   m_EnableTreeColliders: 1
 --- !u!218 &2035929478
 Terrain:
@@ -17560,7 +17492,7 @@ Terrain:
   m_GameObject: {fileID: 2035929475}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 0b2631fc51461461dbfcfaf24f8f919f, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 8d9bb8b98cb6345168d3396b7fe9e197, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 620
   m_TreeCrossFadeLength: 200
