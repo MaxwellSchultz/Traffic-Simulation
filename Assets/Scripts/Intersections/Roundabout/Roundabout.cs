@@ -10,13 +10,9 @@ public class Roundabout : Intersection
     //private float StopDelay = 100f;
     //private float Timer;
     [SerializeField]
-    private PathManager PathManager;
-    [SerializeField]
-    IntersectionResourceManager IntersectionResourceManager;
-    [SerializeField]
-    private GameObject[] IntersectionBlocks;
-    [SerializeField]
-    private GameObject[] Paths;
+    RoundaboutPathManager PathManagerPath;
+
+
     private Queue<int> queue;
 
 
@@ -87,7 +83,11 @@ public class Roundabout : Intersection
     {
         if (!AllowedCars.Contains(car))
         {
-            bool allowedTurn = IntersectionResourceManager.Request(id, intent);
+            /*if (car.GetComponent<CarAI>().WillTurnRound() < 30)
+            {
+                intent = 1;
+            }*/
+            bool allowedTurn = true; //IntersectionResourceManager.Request(id, intent);
             WaitingCars[id] = new Tuple<GameObject, int>(car, intent);
             if (!allowedTurn)
             {
@@ -104,7 +104,7 @@ public class Roundabout : Intersection
 
     private void LockPath(GameObject car, int id, int intent)
     {
-        List<Vector3> path = PathManager.GetTurn(intent, id);
+        List<Vector3> path = PathManagerPath.GetPath(id, intent);
         if (intent != 0) { car.GetComponent<CarAI>().LockTurnSpeed(); }
 
         car.GetComponent<CarAI>().ReleaseSlowSpeed();

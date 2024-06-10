@@ -35,7 +35,7 @@ public class RoundaboutPathManager : MonoBehaviour
     {
         List<Vector3> fullPath = new List<Vector3>();
         List<Vector3> currentPath;
-        for (int i = 0; i < intent; i++)
+        for (int i = 0; i <= intent; i++)
         {
             currentPath = paths[((root + i) % 4)];
             for (int j = 0; j < currentPath.Count();j++) { fullPath.Add(currentPath[j]); }
