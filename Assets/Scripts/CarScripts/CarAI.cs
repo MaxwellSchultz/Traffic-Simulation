@@ -25,7 +25,7 @@ public class CarAI : MonoBehaviour
 
     [Header("General Parameters")]// Look at the documentation for a detailed explanation 
     public List<string> NavMeshLayers;
-    public int MaxSteeringAngle = 45;
+    public int MaxSteeringAngle = 60;
     public int MaxRPM = 150;
 
     [Header("Debug")]
