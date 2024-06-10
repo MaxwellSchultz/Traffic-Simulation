@@ -40,7 +40,7 @@ public class CarAI : MonoBehaviour
 
     private Vector3 PostionToFollow = Vector3.zero;
     private int currentWayPoint;
-    private float AIFOV = 50;
+    private float AIFOV = 45;
     private bool allowMovement;
     private int NavMeshLayerBite;
     private List<Vector3> waypoints = new List<Vector3>();
@@ -173,7 +173,7 @@ public class CarAI : MonoBehaviour
 
         void Calculate(Vector3 destination, Vector3 sourcePostion, Vector3 direction, int NavMeshAreaByte)
         {
-            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 150, 1 << NavMesh.GetAreaFromName(NavMeshLayers[0])) &&
+            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 50, 1 << NavMesh.GetAreaFromName(NavMeshLayers[0])) &&
                 NavMesh.CalculatePath(sourcePostion, hit.position, NavMeshAreaByte, path) && path.corners.Length > 2)
             {
                 if (CheckForAngle(path.corners[1], sourcePostion, direction))
@@ -207,30 +207,40 @@ public class CarAI : MonoBehaviour
 
     public void CustomPath(Transform destination) //Creates a path to the Custom destination
     {
+        const int MaxRetries = 10;
+        int retryCount = 0;
         NavMeshPath path = new NavMeshPath();
         Vector3 sourcePostion;
 
-        if (waypoints.Count == 0)
+        while (retryCount < MaxRetries)
         {
-            sourcePostion = carFront.position;
-            Calculate(destination.position, sourcePostion, carFront.forward, NavMeshLayerBite);
-        }
-        else
-        {
-            sourcePostion = waypoints[waypoints.Count - 1];
-            Vector3 direction = (waypoints[waypoints.Count - 1] - waypoints[waypoints.Count - 2]).normalized;
-            Calculate(destination.position, sourcePostion, direction, NavMeshLayerBite);
-        }
 
-        void Calculate(Vector3 destination, Vector3 sourcePostion, Vector3 direction, int NavMeshAreaBite)
+            if (waypoints.Count == 0)
+            {
+                sourcePostion = carFront.position;
+                if (Calculate(destination.position, sourcePostion, carFront.forward, NavMeshLayerBite)) return;
+            }
+            else
+            {
+                sourcePostion = waypoints[waypoints.Count - 1];
+                Vector3 direction = (waypoints[waypoints.Count - 1] - waypoints[waypoints.Count - 2]).normalized;
+                if (Calculate(destination.position, sourcePostion, direction, NavMeshLayerBite)) return;
+            }
+
+            retryCount++;
+        }
+        debug("Reached maximum retry limit for generating a custom path.",true);
+
+        bool Calculate(Vector3 destination, Vector3 sourcePostion, Vector3 direction, int NavMeshAreaBite)
         {
-            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 150, NavMeshAreaBite) &&
+            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 25, NavMeshAreaBite) &&
                 NavMesh.CalculatePath(sourcePostion, hit.position, NavMeshAreaBite, path))
             {
                 if (path.corners.ToList().Count() > 1 && CheckForAngle(path.corners[1], sourcePostion, direction))
                 {
                     waypoints.AddRange(path.corners.ToList());
                     debug("Custom Path generated successfully", false);
+                    return true;
                 }
                 else
                 {
@@ -238,6 +248,7 @@ public class CarAI : MonoBehaviour
                     {
                         waypoints.AddRange(path.corners.ToList());
                         debug("Custom Path generated successfully", false);
+                        return true;
                     }
                     else
                     {
@@ -253,6 +264,7 @@ public class CarAI : MonoBehaviour
                 FailInvalid = true;
                 Fails++;
             }
+            return false;
         }
     }
 
@@ -400,6 +412,7 @@ public class CarAI : MonoBehaviour
         move = true;
         TurnLock = false;
         slowSpeed = false;
+        PostionToFollow = Vector3.zero;
     }
 
     public void LockTurnSpeed()
@@ -433,18 +446,7 @@ public class CarAI : MonoBehaviour
 
     public float WillTurn()
     {
-        // TurnIntent angle > 4
-        // TurnIntent Distance < 30
-        //print(currentWayPoint + 1);
-        /*Vector3 nextWaypoint;
-        if (waypoints.Count <= currentWayPoint + 1)
-        {
-            nextWaypoint = waypoints.ElementAt(currentWayPoint);
-        }
-        else
-        {
-            nextWaypoint = waypoints.ElementAt(currentWayPoint + 1);
-        }*/
+
         List<Vector3> nextWaypoints = SeeFuture(6);
         float lastAngle = 0;
         float ReturnVal = 0;
@@ -480,58 +482,6 @@ public class CarAI : MonoBehaviour
 
 
 
-        /*if (nextWaypoint != null)
-        {
-
-
-            if (Angle < TurnIntentAngle)
-            {
-                ReturnVal = 0; // Signal Straight
-            }
-            else if (Magnitude > TurnDistance)
-            {
-                ReturnVal = 0;
-            }
-            else // Mag < TurnDistance
-            {
-                List<Vector3> nextMoves = SeeFuture(2);
-                bool confirm = true;
-                ReturnVal = Angle;
-
-                ReturnVal *= LeftOrRight(distance);
-                if (CheckUTurn() && ReturnVal < 0)
-                {
-                    ReturnVal = 720;
-                }
-                if (ReturnVal < 0)
-                { //If left turn
-                    for (int i = 1; i < nextMoves.Count - 1; i++)
-                    {
-                        Vector3 nextDist = (nextMoves[i] - gameObject.transform.position).normalized;
-                        float nextCosAngle = Vector3.Dot(nextDist, gameObject.transform.forward);
-                        float nextAngle = Mathf.Acos(nextCosAngle) * Mathf.Rad2Deg;
-                        float nextMag = (nextMoves[i] - gameObject.transform.position).magnitude;
-                        if (nextAngle > lastAngle)
-                        {
-                            confirm = true;
-                        }
-                        else
-                        {
-                            confirm = false;
-                        }
-                        lastAngle = nextAngle;
-                    }
-                    if (!confirm)
-                    {
-                        ReturnVal = 0;
-                    }
-                }
-
-            }
-            return ReturnVal;
-        }
-        else return 0;
-        */
         int LeftOrRight(Vector3 move)
         {
             int Intent;
