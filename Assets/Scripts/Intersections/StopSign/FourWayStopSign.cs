@@ -65,6 +65,7 @@ public class FourWayStopSign : Intersection
             other.GetComponentInParent<CarAI>().ReBakePath();
             other.gameObject.transform.parent.Find("StopBox").gameObject.SetActive(true);
             AllowedCars.Remove(other.gameObject);
+
             /*other.gameObject.transform.parent.GetComponentInChildren<SensorManager>().Active(true);
             TrackedCars.Remove(other.gameObject);
             StopWaiting();*/
@@ -72,11 +73,9 @@ public class FourWayStopSign : Intersection
     }
     private void OnTriggerExit(Collider other)
     {
-       /* if (other.CompareTag("Car"))
+       if (other.CompareTag("Car"))
         {
-            GameObject car = other.gameObject;
-            TrackedCars.Remove(car);
-        }*/
+        }
     }
 
 
