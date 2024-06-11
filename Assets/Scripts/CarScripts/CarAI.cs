@@ -552,14 +552,15 @@ public class CarAI : MonoBehaviour
     public float WillTurnRound()
     {
 
-        List<Vector3> nextWaypoints = SeeFuture(7);
+        List<Vector3> nextWaypoints = SeeFuture(20);
         float lastAngle = 0;
         float ReturnVal = 0;
         Vector3 distance = transform.forward;
         float Magnitude = 0;
+        float localTurnDist = 300;
         foreach (var waypoint in waypoints)
         {
-            if (Magnitude < TurnDistance)
+            if (Magnitude < localTurnDist)
             {
                 distance = (waypoint - gameObject.transform.position).normalized;
                 float CosAngle = Vector3.Dot(distance, gameObject.transform.forward);
@@ -616,7 +617,7 @@ public class CarAI : MonoBehaviour
             float backCast;
             for (int i = 0; i < nextMoves.Count - 1; i++)
             {
-                if ((nextMoves[i] - pos).magnitude > TurnDistance)
+                if ((nextMoves[i] - pos).magnitude > localTurnDist)
                 {
                     break;
                 }
