@@ -81,12 +81,32 @@ public class Roundabout : Intersection
 
     public override void SignalIntent(int id, int intent, GameObject car)
     {
+        float turn = car.GetComponent<CarAI>().WillTurnRound();
+        if (turn > 0)
+        {
+            if (turn == 720)
+            {
+                intent = 3;
+            }
+            else
+            {
+                intent = 0;
+            }
+        }
+        else if (turn < 0)
+        {
+            intent = 2;
+        }
+        else
+        {
+            intent = 1;
+        }
         if (!AllowedCars.Contains(car))
         {
-            /*if (car.GetComponent<CarAI>().WillTurnRound() < 30)
+            if (turn < 3 && car.GetComponent<CarAI>().WillTurnRound() < 45)
             {
-                intent = 1;
-            }*/
+                turn = 1;
+            }
             bool allowedTurn = true; //IntersectionResourceManager.Request(id, intent);
             WaitingCars[id] = new Tuple<GameObject, int>(car, intent);
             if (!allowedTurn)
