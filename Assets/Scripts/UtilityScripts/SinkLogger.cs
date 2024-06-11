@@ -82,7 +82,7 @@ public class SinkLogger : MonoBehaviour
     // Method to log a message to the file
     public void Log(string message)
     {
-        string logEntry = $"{DateTime.Now:mm:ss.fff}: {message}";
+        string logEntry = $"{DateTime.Now:hh:mm:ss.fff}, {message}";
         logQueue.Enqueue(logEntry);
     }
 
